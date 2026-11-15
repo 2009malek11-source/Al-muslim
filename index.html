@@ -37,7 +37,7 @@ html.v6-intro .app,html.v6-intro header.top,html.v6-intro #v101Dock{visibility:h
 </style>
 <script>
 document.documentElement.classList.add('v6-intro');
-window.__b = '469bd0ce99'; window.__t = 1794747235;
+window.__b = '515e79f6ec'; window.__t = 1794764540;
 </script><script>
 (function () {
     try {
@@ -12187,7 +12187,7 @@ select.field{min-height:46px;appearance:auto;-webkit-appearance:menulist;backgro
     mkPage('quranOff', back('📖 مصحف القرآن', '') + '<div class="card detailHero"><div class="detailIcon">🚧</div><h2>غير متاح الآن</h2><p>ميزة المصحف مغلقة مؤقتًا وسنعيدها قريبًا بإذن الله.</p><div class="controls" style="justify-content:center"><button class="primary" onclick="show(\'readers\')">🎧 استمع إلى التلاوات</button><button onclick="show(\'repeatAyah\')">🔁 تكرار الآية</button><button onclick="show(\'khatmah\')">🕋 ختمة القرآن</button></div></div>');
     mkPage('hadithOff', back('📜 الأحاديث', '') + '<div class="card detailHero"><div class="detailIcon">🚧</div><h2>غير متاح الآن</h2><p>ميزة الأحاديث مغلقة مؤقتًا وسنعيدها قريبًا بإذن الله.</p><p class="mini">في الأثناء قد يفيدك:</p><div class="controls" style="justify-content:center"><button class="primary" onclick="show(\'adhkar\');initAdhkarV27()">🤲 الأذكار والأدعية</button><button onclick="show(\'ruqyah\');renderRuqyah()">🕋 الرقية الشرعية</button><button onclick="show(\'children\');initChildren()">🧒 قصص الأنبياء للأطفال</button><button onclick="show(\'readers\')">🎧 استمع إلى التلاوات</button></div></div>');
     mkPage('tasmeeOff', back('🎙️ تسميع القرآن', '') + '<div class="card detailHero"><div class="detailIcon">🚧</div><h2>غير متاح الآن</h2><p>ميزة تسميع القرآن مغلقة مؤقتًا وسنعيدها قريبًا بإذن الله.</p><p class="mini">لمراجعة الحفظ في الأثناء:</p><div class="controls" style="justify-content:center"><button class="primary" onclick="show(\'repeatAyah\')">🔁 تكرار الآية (للحفظ بالترديد)</button><button onclick="show(\'readers\')">🎧 استمع إلى القرّاء</button><button onclick="show(\'khatmah\')">🕋 ختمة القرآن</button></div></div>');
-    mkPage('assistant', back('💬 مساعد المسلم', 'اسأل عن محتويات التطبيق: قرّاء، رقية، أذكار، أقسام.') + '<div class="card v103Chat"><div id="v103Msgs" class="v103Msgs"></div><form id="v103Form" class="v103Form" autocomplete="off"><input id="v103In" class="field" placeholder="اكتب سؤالك عن التطبيق…" maxlength="200"><button class="primary" type="submit">إرسال</button></form><div class="mini" style="margin-top:6px">هذا مساعد داخلي للتطبيق يبحث في محتوياته؛ لا يجيب عن الفقه والفتاوى.</div></div>');
+    mkPage('assistant', back('💬 مساعد المسلم', 'اسأل عن محتويات التطبيق: قرّاء، رقية، أذكار، أقسام.') + '<div class="card v103Chat"><div id="v103Msgs" class="v103Msgs"></div><form id="v103Form" class="v103Form" autocomplete="off"><input id="v103In" class="field" placeholder="اكتب سؤالك عن التطبيق…" maxlength="200"><button class="primary" type="submit">إرسال</button></form><div class="mini" style="margin-top:6px">مساعد داخلي يعرف أقسام التطبيق وإعداداته ويفتحها لك. لا يجيب عن الفقه والفتاوى والتفسير. للأسئلة العامة تظهر لك أزرار ChatGPT وClaude وGemini.</div></div>');
     const os = window.show;
     window.show = function (id) {
         if (id === 'quran' || id === 'quranDetail')
@@ -12764,7 +12764,7 @@ select.field{min-height:46px;appearance:auto;-webkit-appearance:menulist;backgro
     function greet() { const m = $('v103Msgs'); if (!m)
         return; if (!m.children.length) {
         botAdd('أهلًا بك في موقع المسلم 🌙<br>أنا مساعد التطبيق. اسألني عن أي شيء في محتوياته، مثل: «هل لديكم القارئ …؟» أو «هل توجد رقية …؟» أو «أين أجد الأذكار؟».<br><span class="mini">لا أجيب عن الفقه والفتاوى والأحكام.</span>', 'bot');
-        botAdd('<div class="v103Chips">' + ['هل لديكم القارئ ماهر المعيقلي', 'هل لديكم رقية', 'أين أجد القبلة', 'هل توجد أذكار الصباح'].map(x => `<button type="button" data-q="${E(x)}">${E(x)}</button>`).join('') + '</div>', 'bot');
+        botAdd('<div class="v103Chips">' + ['هل لديكم القارئ ماهر المعيقلي', 'هل لديكم رقية', 'أين أجد القبلة', 'هل توجد أذكار الصباح', 'كيف أغيّر حجم الخط', 'ماذا في أدوات المسلم', 'كيف أحمّل المصحف دون إنترنت'].map(x => `<button type="button" data-q="${E(x)}">${E(x)}</button>`).join('') + '</div>', 'bot');
     } }
     function btn(label, js) { return `<button type="button" class="v103Go" onclick="${js}">${E(label)}</button>`; }
     function ext(extra) { return '<div class="mini" style="margin-top:6px">قد تجده في: ' + EXT.map(x => `<a href="https://${x[0]}" target="_blank" rel="noopener">${E(x[1])}</a>`).join(' • ') + '</div>'; }
@@ -12897,7 +12897,7 @@ select.field{min-height:46px;appearance:auto;-webkit-appearance:menulist;backgro
 <script src="travel.29a9f31f1a.js?h=29a9f31f1a" defer></script>
 <script src="reciters-nationality.0f368e57f8.js?h=0f368e57f8" defer></script><script src="playlist.29cb6d27a9.js?h=29cb6d27a9" defer></script>
 
-<link rel="stylesheet" href="app107.d1400371f1.css?h=d1400371f1">
+<link rel="stylesheet" href="app107.09222162da.css?h=09222162da">
 <script src="adhan-config.6ae52d635c.js?h=6ae52d635c"></script>
 <script src="prayer.c5beb1abed.js?h=c5beb1abed"></script>
 <script src="push-client.4214f64b48.js?h=4214f64b48"></script><script src="audio-manager.6c123ab5bd.js?h=6c123ab5bd"></script><script src="notifications.ccce094b18.js?h=ccce094b18"></script><script src="notification-settings.bc601aaa58.js?h=bc601aaa58"></script><script src="prayer-notifications.610021a76a.js?h=610021a76a"></script><script src="iqama-notifications.8e8180306f.js?h=8e8180306f"></script><script src="adhkar-notifications.a924207814.js?h=a924207814"></script><script src="backgrounds.23ef74adcf.js?h=23ef74adcf"></script><script src="updater.c8e68d4ede.js?h=c8e68d4ede"></script>
@@ -12908,6 +12908,7 @@ select.field{min-height:46px;appearance:auto;-webkit-appearance:menulist;backgro
 <script src="mosques.23a604f42d.js?h=23a604f42d"></script>
 <script src="abloop.aa1b7fb463.js?h=aa1b7fb463"></script>
 <script src="qibla.07d4df4660.js?h=07d4df4660"></script>
-<script src="app107.e899836125.js?h=e899836125"></script>
+<script src="app107.0218cd4163.js?h=0218cd4163"></script>
+<script src="tools120.b0f6c460f6.js?h=b0f6c460f6" defer></script><script src="assistant-kb.620d4c2a91.js?h=620d4c2a91" defer></script>
 </body>
 </html>
