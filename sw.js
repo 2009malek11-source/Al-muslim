@@ -1,14 +1,14 @@
 /* sw.js — Service Worker «المسلم»  (يُولَّد من _dev/sw.template.js بواسطة _dev/build.py — لا تعدّله يدوياً)
  * سياسة التحديث (واحدة وواضحة):
  *  1) التثبيت لا يكتمل حتى تُنزَّل كل ملفات النسخة الجديدة بنجاح؛ وإلا يبقى القديم سليماً ويُعاد المحاولة لاحقاً.
- *  2) عند التفعيل: تُحذف الكاشات القديمة، ويستولي الـ SW على الصفحات، فتُعاد الصفحة مرة واحدة إلى النسخة الجديدة.
+ *  2) عند التفعيل: تُحذف كاشات الواجهة القديمة ويستولي الـ SW على الصفحات. (إعادة التحميل يتولاها updater.js وحده.)
  *  3) صفحة التنقّل (index.html): الشبكة أولاً (إعادة تحقق دائماً) مع مهلة 3 ثوانٍ ثم نسخة هذا الإصدار نفسه فقط.
  *     لا يُعاد أبداً أي إصدار أقدم (أُزيلت دالة legacyShell التي كانت تُظهر نسخاً قديمة بلا مصحف).
  */
-const BID = '0aea8d44d1', BT = 1794805129;
+const BID = '8da7d5dee1', BT = 1794890101;
 const CACHE = 'muslim-shell-' + BID;
 const FONTS = 'muslim-fonts-v1';
-const CORE = ["./", "./index.html", "./manifest.json", "./app-config.5438345603.js?h=5438345603", "./radius.fb103ec150.css?h=fb103ec150", "./style.782c53b7fb.css?h=782c53b7fb", "./script.29ba075b24.js?h=29ba075b24", "./assistant-cmd.2559bdf697.js?h=2559bdf697", "./travel.575fe86c2d.js?h=575fe86c2d", "./reciters-nationality.0f368e57f8.js?h=0f368e57f8", "./playlist.29cb6d27a9.js?h=29cb6d27a9", "./app107.4e8e80a8ba.css?h=4e8e80a8ba", "./adhan-config.6ae52d635c.js?h=6ae52d635c", "./prayer.c5beb1abed.js?h=c5beb1abed", "./push-client.4214f64b48.js?h=4214f64b48", "./audio-manager.6c123ab5bd.js?h=6c123ab5bd", "./notifications.ccce094b18.js?h=ccce094b18", "./notification-settings.bc601aaa58.js?h=bc601aaa58", "./prayer-notifications.610021a76a.js?h=610021a76a", "./iqama-notifications.8e8180306f.js?h=8e8180306f", "./adhkar-notifications.a924207814.js?h=a924207814", "./backgrounds.575f333c9b.js?h=575f333c9b", "./updater.c8e68d4ede.js?h=c8e68d4ede", "./calendar.abb99a59d5.js?h=abb99a59d5", "./radius.f2a462260f.js?h=f2a462260f", "./favorites-ui.d15c1f68ea.js?h=d15c1f68ea", "./mushaf.3cf25b23c5.js?h=3cf25b23c5", "./hadith107.2cd6edbb8d.js?h=2cd6edbb8d", "./mosques.23a604f42d.js?h=23a604f42d", "./abloop.aa1b7fb463.js?h=aa1b7fb463", "./qibla.07d4df4660.js?h=07d4df4660", "./app107.0218cd4163.js?h=0218cd4163", "./fuzzy.e42b2ec543.js?h=e42b2ec543", "./tools120.0883b0a3f3.js?h=0883b0a3f3", "./scholars.040d1cd6d4.js?h=040d1cd6d4", "./assistant-kb.e1c6a295d3.js?h=e1c6a295d3", "./perf120.037c390b1c.js?h=037c390b1c", "./ic-192.png", "./ic-512.png", "./identity.webp"];
+const CORE = ["./", "./index.html", "./manifest.json", "./app-config.5438345603.js?h=5438345603", "./radius.fb103ec150.css?h=fb103ec150", "./style.782c53b7fb.css?h=782c53b7fb", "./script.7e6cfc8b48.js?h=7e6cfc8b48", "./assistant-cmd.2559bdf697.js?h=2559bdf697", "./travel.575fe86c2d.js?h=575fe86c2d", "./reciters-nationality.0f368e57f8.js?h=0f368e57f8", "./playlist.29cb6d27a9.js?h=29cb6d27a9", "./app107.0df79e630b.css?h=0df79e630b", "./adhan-config.6ae52d635c.js?h=6ae52d635c", "./prayer.c5beb1abed.js?h=c5beb1abed", "./push-client.4214f64b48.js?h=4214f64b48", "./audio-manager.6c123ab5bd.js?h=6c123ab5bd", "./notifications.ccce094b18.js?h=ccce094b18", "./notification-settings.bc601aaa58.js?h=bc601aaa58", "./prayer-notifications.610021a76a.js?h=610021a76a", "./iqama-notifications.8e8180306f.js?h=8e8180306f", "./adhkar-notifications.a924207814.js?h=a924207814", "./backgrounds.47987948bc.js?h=47987948bc", "./updater.3d7ad8f0b7.js?h=3d7ad8f0b7", "./calendar.abb99a59d5.js?h=abb99a59d5", "./radius.f2a462260f.js?h=f2a462260f", "./favorites-ui.6030262305.js?h=6030262305", "./mushaf.75ff43f72e.js?h=75ff43f72e", "./hadith107.9e2a30c070.js?h=9e2a30c070", "./mosques.01cef142c6.js?h=01cef142c6", "./abloop.aa1b7fb463.js?h=aa1b7fb463", "./qibla.07d4df4660.js?h=07d4df4660", "./app107.06900773da.js?h=06900773da", "./fuzzy.e42b2ec543.js?h=e42b2ec543", "./assistant-kb.75f239c22f.js?h=75f239c22f", "./perf120.037c390b1c.js?h=037c390b1c", "./kids-salah.2911d944ed.js?h=2911d944ed", "./repeat-plus.89b5d159d1.js?h=89b5d159d1", "./quran-test.a105d75e53.js?h=a105d75e53", "./whatsnew.b82fe72471.js?h=b82fe72471", "./ic-192.png", "./ic-512.png", "./identity.webp"];
 const KEEP = ['muslim-audio', 'muslim-files', 'muslim-config', 'muslim-hadith', 'muslim-human-audio', 'muslim-adhkar-audio', 'muslim-data', 'muslim-v80-ruqyah', 'muslim-fonts', 'muslim-notify'];
 const keepName = k => k === CACHE || KEEP.some(p => k.indexOf(p) === 0);
 const cm = (req, opt) => caches.open(CACHE).then(c => c.match(req, opt));
@@ -49,14 +49,9 @@ self.addEventListener('install', e => {
 self.addEventListener('activate', e => {
     e.waitUntil((async () => {
         const ks = await caches.keys();
-        const hadOld = ks.some(k => /^muslim-shell-/.test(k) && k !== CACHE);
         await Promise.all(ks.filter(k => !keepName(k)).map(k => caches.delete(k)));
         try { const c = await caches.open('muslim-config-v1'); await c.delete('./__prayer.json'); } catch (_) { }
         await self.clients.claim();
-        if (hadOld) {
-            const cs = await self.clients.matchAll({ type: 'window' });
-            cs.forEach(c => c.postMessage({ t: 'updated', type: 'updated', b: BID, bt: BT }));
-        }
         precacheSoft();
         await checkDue('activate');
     })());
