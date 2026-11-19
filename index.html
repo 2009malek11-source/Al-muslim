@@ -6,7 +6,7 @@
 <title>المسلم</title>
 <style id="v6IntroCss">
 html.v6-intro,html.v6-intro body{background:#0a3329!important;overflow:hidden}
-html.v6-intro .app,html.v6-intro header.top,html.v6-intro #v101Dock{visibility:hidden}
+html.v6-intro .app,html.v6-intro header.top,html.v6-intro #v101Dock,html.v6-intro nav.nav{visibility:hidden}
 #v6Intro{position:fixed;top:0;left:0;right:0;bottom:0;z-index:99999;overflow:hidden;background:radial-gradient(ellipse at 50% 42%,#14604b 0,#0a3329 62%,#06231c 100%);color:#fff;display:grid;place-items:center;direction:rtl;opacity:1;transition:opacity .4s ease}
 #v6Intro.out{opacity:0;pointer-events:none}
 /* القاعدة: كل عنصر ظاهر افتراضياً، والإخفاء الأوّلي داخل الحركة نفسها (from + backwards) — فإن لم يدعم الجهاز الحركات تظهر المقدمة ثابتة بدل أن تبقى فارغة */
@@ -37,7 +37,7 @@ html.v6-intro .app,html.v6-intro header.top,html.v6-intro #v101Dock{visibility:h
 </style>
 <script>
 document.documentElement.classList.add('v6-intro');
-window.__b = 'caa8dafd7c'; window.__t = 1794994026;
+window.__b = '5247cde6cd'; window.__t = 1795081729;
 </script><script>
 (function () {
     try {
@@ -151,19 +151,9 @@ html,body{min-height:100%}
  background:rgba(245,241,231,.94) !important;
  border-bottom:1px solid var(--line) !important;
 }
-.app{padding-top:100px !important}
 .top .brand,.top .theme,.top button{position:relative;z-index:1001}
 .top button,.theme{pointer-events:auto !important;cursor:pointer !important}
-.nav{
- position:fixed !important;top:88px !important;right:14px !important;bottom:auto !important;
- left:auto !important;width:94px !important;height:auto !important;z-index:900 !important;
-}
 .nav button{pointer-events:auto !important;cursor:pointer !important}
-@media(max-width:700px){
- .top{padding-left:10px !important;padding-right:10px !important}
- .app{padding-top:88px !important}
- .nav{top:74px !important;right:8px !important;width:82px !important}
-}
 </style>
 <style>.customAudio{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px;margin:12px 0}.customAudio audio{display:none}.audioTop{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:8px}.audioTop b{color:var(--text)}#audioTime{color:var(--muted);font-size:.9rem}.audioSeek{width:100%;accent-color:var(--gold);cursor:pointer}.audioControls{justify-content:center}</style>
 <style>
@@ -180,11 +170,9 @@ html,body{min-height:100%}
 </style>
 <style id="v26-mobile-first">
 html{overflow-x:hidden}body{overflow-x:hidden}button,a,input,select,textarea{touch-action:manipulation}
-.top{position:sticky!important;top:0!important;height:58px!important;padding:7px 10px!important;z-index:1000!important}
-.app{width:100%!important;max-width:none!important;margin:0!important;padding:0 10px calc(88px + env(safe-area-inset-bottom))!important}
 .top .brand{min-width:0}.top .brand b{font-size:calc(15px*var(--v105-fs,1))}.top .brand small{display:none}.top .logo{width:40px!important;height:40px!important}
 .hero{min-height:190px!important;padding:22px 18px!important;border-radius:22px!important}.hero h1{font-size:calc(27px*var(--v105-fs,1))!important}.hero p{font-size:calc(13px*var(--v105-fs,1))}.moon{font-size:calc(58px*var(--v105-fs,1))!important}
-.menu{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important}.menu .tile{min-height:104px!important;padding:14px!important;display:block!important;text-align:center!important}.menu .tile .ico{font-size:calc(27px*var(--v105-fs,1))!important}.menu .tile b{font-size:calc(15px*var(--v105-fs,1))!important;margin-top:7px!important}.menu .tile small{font-size:calc(11px*var(--v105-fs,1))!important}
+
 .section{min-height:48px;margin:5px 0 12px;gap:8px}.section .back{width:42px;height:42px;padding:0;flex:0 0 42px;font-size:calc(19px*var(--v105-fs,1))}.section h2{font-size:calc(20px*var(--v105-fs,1))}.section p{font-size:calc(12px*var(--v105-fs,1));margin:2px 0}
 .readerGrid{grid-template-columns:1fr!important;gap:9px}.reader{padding:12px!important;border-radius:15px}.readerTop{align-items:center}.reader b{font-size:calc(16px*var(--v105-fs,1));margin-top:5px}.reader small{font-size:calc(12px*var(--v105-fs,1))}
 #readerDetail .player{position:static!important;bottom:auto!important;margin-top:12px!important;border-radius:17px!important}.customAudio{padding:10px!important;margin:8px 0!important}.audioControls{margin-top:7px!important}.audioControls button{padding:8px 10px!important}.controls{gap:6px}.repeatBtn{font-size:calc(11px*var(--v105-fs,1))!important;padding:7px 8px!important;min-height:34px!important}.player>.controls:last-child{display:grid;grid-template-columns:1fr 1fr}.player>.controls:last-child button{width:100%}
@@ -193,7 +181,6 @@ html{overflow-x:hidden}body{overflow-x:hidden}button,a,input,select,textarea{tou
 .nav{position:fixed!important;left:0!important;right:0!important;bottom:0!important;top:auto!important;width:100%!important;height:62px!important;padding:5px 6px calc(5px + env(safe-area-inset-bottom))!important;border-radius:16px 16px 0 0!important;z-index:1001!important;display:flex!important;justify-content:center!important}.nav button{min-width:90px!important;height:46px!important}
 .search,.field{font-size:calc(16px*var(--v105-fs,1))!important;min-height:46px}.card{padding:13px!important;border-radius:16px}.setting{padding:13px!important}.settingsGrid{gap:8px}.setting button{min-height:42px}.rewayaGrid{grid-template-columns:1fr 1fr!important}.rewayaBtn{padding:11px 8px!important;font-size:calc(13px*var(--v105-fs,1))}.quranAyahs{padding:6px!important}.quranAyahs .ayah{font-size:var(--mushaf-font,28px)!important;line-height:2.15!important;padding:12px 4px!important}.mushafToolbar{position:static!important;flex-wrap:wrap;padding:8px!important}.mushafToolbar .group{flex-wrap:wrap}.mushafToolbar button{padding:7px 9px!important;font-size:calc(12px*var(--v105-fs,1))}
 .fatwaWarning{margin-top:12px;padding:10px;border-radius:12px;background:#f5ead0;color:#5c4b2c;font-size:calc(12px*var(--v105-fs,1));line-height:1.7}.dark .fatwaWarning{background:#2e2a20;color:#f1dfac}.fatwaBadge{display:inline-block;padding:5px 9px;border-radius:999px;background:rgba(21,91,73,.1);color:var(--green);font-size:calc(11px*var(--v105-fs,1));font-weight:700}
-@media(min-width:681px){.app{max-width:980px!important;margin:auto!important;padding:88px 18px 100px!important}.top{position:fixed!important}.nav{position:fixed!important;left:auto!important;right:12px!important;top:82px!important;bottom:auto!important;width:92px!important;height:auto!important;border-radius:16px!important}.app{margin-right:110px!important;max-width:1040px!important}}
 @media(max-width:390px){.app{padding-left:7px!important;padding-right:7px!important}.menu{gap:7px!important}.menu .tile{min-height:98px!important;padding:11px 7px!important}.menu .tile b{font-size:calc(14px*var(--v105-fs,1))!important}.menu .tile small{font-size:calc(10px*var(--v105-fs,1))!important}.nav button{min-width:82px!important}.nav button b{font-size:calc(10px*var(--v105-fs,1))!important}.globalMiniPlayer{left:5px!important;right:5px!important}.miniPlayerActions{gap:3px!important}}
 @media(orientation:landscape) and (max-height:520px){.top{height:50px!important}.hero{min-height:150px!important}.menu{grid-template-columns:repeat(3,minmax(0,1fr))!important}.nav{height:54px!important}.nav button{height:40px!important}.app{padding-bottom:70px!important}}
 </style>
@@ -8253,8 +8240,8 @@ select.field{min-height:46px;appearance:auto;-webkit-appearance:menulist;backgro
 #v101Dock>*{pointer-events:auto}
 #v101DockPlayers{display:flex;flex-direction:column;gap:6px;empty-cells:hide}
 #v101DockPlayers:empty{display:none}
-#v101Dock .nav,#v101Dock #globalMiniPlayer,#v101Dock .v43AudioBar,#v101Dock #v100Q{position:static!important;inset:auto!important;left:auto!important;right:auto!important;top:auto!important;bottom:auto!important;width:100%!important;max-width:none!important;margin:0!important;transform:none!important}
-#v101Dock .nav{height:auto!important;max-height:62px!important;flex-direction:row!important;justify-content:center;border-radius:20px!important}
+#v101Dock #globalMiniPlayer,#v101Dock .v43AudioBar,#v101Dock #v100Q{position:static!important;inset:auto!important;left:auto!important;right:auto!important;top:auto!important;bottom:auto!important;width:100%!important;max-width:none!important;margin:0!important;transform:none!important}
+
 #v101Dock #globalMiniPlayer{max-height:none!important;min-height:44px!important}
 #v101Dock #v100Q{box-shadow:0 6px 20px #0004}
 .app{padding-bottom:calc(var(--dockH,80px) + 30px)!important}
@@ -11922,15 +11909,11 @@ select.field{min-height:46px;appearance:auto;-webkit-appearance:menulist;backgro
     function build() {
         if (document.getElementById('v101Dock'))
             return;
-        const nav = document.querySelector('.nav');
-        if (!nav)
-            return;
         const dock = document.createElement('div');
         dock.id = 'v101Dock';
         const players = document.createElement('div');
         players.id = 'v101DockPlayers';
         dock.appendChild(players);
-        dock.appendChild(nav);
         document.body.appendChild(dock);
         const adopt = () => { document.querySelectorAll('#globalMiniPlayer,.v43AudioBar,#v100Q').forEach(e => { if (e.parentNode !== players)
             players.appendChild(e); }); };
@@ -12816,12 +12799,13 @@ select.field{min-height:46px;appearance:auto;-webkit-appearance:menulist;backgro
 })();
 </script>
 
-<link rel="stylesheet" href="style.782c53b7fb.css?h=782c53b7fb"><script src="script.9b8300e033.js?h=9b8300e033" defer></script>
+<link rel="stylesheet" href="style.6f2a3f0970.css?h=6f2a3f0970"><script src="script.9b8300e033.js?h=9b8300e033" defer></script>
 <script src="assistant-cmd.2559bdf697.js?h=2559bdf697" defer></script>
 <script src="travel.575fe86c2d.js?h=575fe86c2d" defer></script>
 <script src="reciters-nationality.0f368e57f8.js?h=0f368e57f8" defer></script><script src="playlist.29cb6d27a9.js?h=29cb6d27a9" defer></script>
 
-<link rel="stylesheet" href="app107.ade738c4ee.css?h=ade738c4ee">
+<link rel="stylesheet" href="app107.42bdb80d35.css?h=42bdb80d35">
+<link rel="stylesheet" href="nova.54ad01cd46.css?h=54ad01cd46">
 <script src="adhan-config.6ae52d635c.js?h=6ae52d635c"></script>
 <script src="prayer.c5beb1abed.js?h=c5beb1abed"></script>
 <script src="push-client.4214f64b48.js?h=4214f64b48"></script><script src="audio-manager.6c123ab5bd.js?h=6c123ab5bd"></script><script src="notifications.ccce094b18.js?h=ccce094b18"></script><script src="notification-settings.bc601aaa58.js?h=bc601aaa58"></script><script src="prayer-notifications.610021a76a.js?h=610021a76a"></script><script src="iqama-notifications.8e8180306f.js?h=8e8180306f"></script><script src="adhkar-notifications.a924207814.js?h=a924207814"></script><script src="backgrounds.47987948bc.js?h=47987948bc"></script><script src="updater.3d7ad8f0b7.js?h=3d7ad8f0b7"></script>
@@ -12833,6 +12817,6 @@ select.field{min-height:46px;appearance:auto;-webkit-appearance:menulist;backgro
 <script src="abloop.aa1b7fb463.js?h=aa1b7fb463"></script>
 <script src="qibla.07d4df4660.js?h=07d4df4660"></script>
 <script src="app107.e6527ceed0.js?h=e6527ceed0"></script>
-<script src="fuzzy.e42b2ec543.js?h=e42b2ec543"></script><script src="assistant-kb.75f239c22f.js?h=75f239c22f" defer></script><script src="perf120.037c390b1c.js?h=037c390b1c" defer></script><script src="kids-salah.2911d944ed.js?h=2911d944ed" defer></script><script src="repeat-plus.00f1fcf10d.js?h=00f1fcf10d" defer></script><script src="quran-test.a105d75e53.js?h=a105d75e53" defer></script><script src="whatsnew.2fbb89deee.js?h=2fbb89deee" defer></script>
+<script src="fuzzy.e42b2ec543.js?h=e42b2ec543"></script><script src="assistant-kb.75f239c22f.js?h=75f239c22f" defer></script><script src="perf120.037c390b1c.js?h=037c390b1c" defer></script><script src="kids-salah.2911d944ed.js?h=2911d944ed" defer></script><script src="repeat-plus.00f1fcf10d.js?h=00f1fcf10d" defer></script><script src="quran-test.a105d75e53.js?h=a105d75e53" defer></script><script src="whatsnew.2fbb89deee.js?h=2fbb89deee" defer></script><script src="nova.be4852488c.js?h=be4852488c" defer></script>
 </body>
 </html>
