@@ -18,15 +18,13 @@ html.v6-intro .app,html.v6-intro header.top,html.v6-intro #v101Dock,html.v6-intr
 #v6Intro .glow{position:absolute;left:50%;top:42%;width:min(80vw,420px);height:min(80vw,420px);margin:calc(min(80vw,420px)/-2) 0 0 calc(min(80vw,420px)/-2);border-radius:50%;background:radial-gradient(circle,rgba(240,201,105,.30),rgba(240,201,105,0) 66%);animation:iGlow 1.8s .2s ease-out backwards}
 #v6Intro .center{position:relative;display:grid;justify-items:center;gap:12px;text-align:center}
 #v6Intro .moon{width:128px;height:128px;overflow:visible;filter:drop-shadow(0 0 10px rgba(240,201,105,.35))}
-#v6Intro .mring{fill:none;stroke:#fff;stroke-width:60;stroke-dasharray:164;stroke-dashoffset:0;transform:rotate(-100deg);transform-origin:50px 50px;animation:iSweep 1.5s .25s cubic-bezier(.45,.05,.25,1) backwards}
-#v6Intro .mshape{animation:iFade 1.5s .25s ease-out backwards;--o:1}
-#v6Intro .star{transform-origin:78px 46px;animation:iStar .9s 1.3s cubic-bezier(.2,.9,.3,1.2) backwards}
-#v6Intro .bism{font-size:clamp(16px,4.4vw,21px);color:#ead397;animation:iWipe 1.1s .95s ease-out backwards}
-#v6Intro h1{margin:0;font-size:clamp(56px,17vw,84px);line-height:1.2;font-weight:800;background:linear-gradient(180deg,#fff8d8,#e8c46e 70%,#c9a14a);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;animation:iTitle 1.1s 1.25s cubic-bezier(.2,.8,.2,1) backwards}
-#v6Intro .rule{width:min(230px,56vw);height:2px;background:linear-gradient(90deg,transparent,#e8c46e,transparent);animation:iRule .9s 1.8s ease-out backwards}
-#v6Intro .sub{font-size:13px;letter-spacing:.42em;color:#a9d3c2;padding-inline-start:.42em;animation:iFade .8s 2s ease-out backwards;--o:1}
-#v6Intro .bar{position:absolute;left:20%;right:20%;bottom:11%;height:3px;border-radius:3px;background:rgba(255,255,255,.12);overflow:hidden;animation:iFade .6s .2s ease-out backwards;--o:1}
-#v6Intro .bar b{display:block;height:100%;background:linear-gradient(270deg,#f0c969,#fff3c4);transform-origin:right;animation:iBar 2.6s linear backwards}
+#v6Intro .mring{fill:none;stroke:#fff;stroke-width:60;stroke-dasharray:164;stroke-dashoffset:0;transform:rotate(-100deg);transform-origin:50px 50px;animation:iSweep 2s .4s cubic-bezier(.45,.05,.25,1) backwards}
+#v6Intro .mshape{animation:iFade 2s .4s ease-out backwards;--o:1}
+#v6Intro .star{transform-origin:78px 46px;animation:iStar 1.1s 2s cubic-bezier(.2,.9,.3,1.2) backwards}
+#v6Intro .bism{font-size:clamp(16px,4.4vw,21px);color:#ead397;animation:iWipe 1.4s 1.4s ease-out backwards}
+#v6Intro h1{margin:0;font-size:clamp(56px,17vw,84px);line-height:1.2;font-weight:800;background:linear-gradient(180deg,#fff8d8,#e8c46e 70%,#c9a14a);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;animation:iTitle 1.4s 1.9s cubic-bezier(.2,.8,.2,1) backwards}
+#v6Intro .rule{width:min(230px,56vw);height:2px;background:linear-gradient(90deg,transparent,#e8c46e,transparent);animation:iRule 1.1s 2.8s ease-out backwards}
+#v6Intro .sub{font-size:13px;letter-spacing:.42em;color:#a9d3c2;padding-inline-start:.42em;animation:iFade 1s 3.2s ease-out backwards;--o:1}
 @keyframes iFade{from{opacity:0}to{opacity:var(--o,1)}}
 @keyframes iGlow{from{opacity:0;transform:scale(.5)}to{opacity:1;transform:scale(1)}}
 @keyframes iSweep{from{stroke-dashoffset:164}to{stroke-dashoffset:0}}
@@ -34,12 +32,12 @@ html.v6-intro .app,html.v6-intro header.top,html.v6-intro #v101Dock,html.v6-intr
 @keyframes iWipe{from{opacity:0;clip-path:inset(0 0 0 100%)}to{opacity:1;clip-path:inset(0 0 0 0)}}
 @keyframes iTitle{from{opacity:0;transform:translateY(14px) scale(.94);clip-path:inset(0 0 0 100%)}to{opacity:1;transform:none;clip-path:inset(0 0 0 0)}}
 @keyframes iRule{from{opacity:0;transform:scaleX(0)}to{opacity:1;transform:none}}
-@keyframes iBar{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+html.v6-intro #updToast{display:none!important}
 @media(prefers-reduced-motion:reduce){#v6Intro *{animation-duration:.01ms!important;animation-delay:0s!important}}
 </style>
 <script>
 document.documentElement.classList.add('v6-intro');
-window.__b = 'd3c577ea78'; window.__t = 1795153462;
+window.__b = '9c2b7fe429'; window.__t = 1795169113;
 </script><script>
 (function () {
     try {
@@ -228,12 +226,12 @@ html{--mushaf-font:28px}
 .settingsCategories{display:grid;gap:14px;margin-top:10px}.settingsCategory{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:12px;box-shadow:var(--glow)}.settingsCategoryTitle{display:flex;align-items:center;gap:9px;padding:8px 8px 12px;font-size:calc(18px*var(--v105-fs,1));font-weight:800;color:var(--text)}.settingsCategoryTitle span{display:grid;place-items:center;width:34px;height:34px;border-radius:11px;background:rgba(21,91,73,.09);color:var(--green)}.settingsCategoryGrid{display:grid;gap:10px}.settingsCategoryGrid .setting{margin:0}.settingsCategoryGrid .setting b{font-size:calc(16px*var(--v105-fs,1))}.settingsCategoryGrid .setting:only-child{border-radius:15px}.dark .settingsCategoryTitle span{background:rgba(209,173,99,.11)}
 </style>
 <style id="settings-accordion-and-display">.settingsCategory{overflow:hidden}.settingsCategoryToggle{width:100%;display:flex;align-items:center;gap:10px;border:0;background:transparent;color:var(--text);padding:12px 8px;cursor:pointer;text-align:right;font:inherit}.settingsCategoryToggle span{display:grid;place-items:center;width:36px;height:36px;border-radius:11px;background:rgba(21,91,73,.09);color:var(--green);flex:0 0 36px}.settingsCategoryToggle b{flex:1;font-size:calc(18px*var(--v105-fs,1))}.settingsCategoryToggle i{font-style:normal;font-size:calc(22px*var(--v105-fs,1));color:var(--muted);transition:transform .2s}.settingsCategory.open .settingsCategoryToggle i{transform:rotate(45deg)}.settingsCategoryBody{display:none;padding:0 4px 4px}.settingsCategory.open .settingsCategoryBody{display:grid;gap:10px}.settingsCategory:first-child .settingsCategoryBody{display:grid}.settingsCategory:first-child .settingsCategoryToggle i{transform:rotate(45deg)}.settingsCategory .setting{background:var(--card)}.dark .settingsCategoryToggle span{background:rgba(209,173,99,.11)}.largeUI .settingsCategoryToggle b{font-size:calc(19px*var(--v105-fs,1))}.reduceMotion *{animation-duration:.01ms!important;transition-duration:.01ms!important}</style><style id="v80-story-video-final">.v80StoryVideo{margin:16px 0;border-radius:18px;overflow:hidden;background:#000;aspect-ratio:16/9}.v80StoryVideo iframe{width:100%;height:100%;border:0;display:block}.v80StoryVideoBtn{display:inline-flex;align-items:center;justify-content:center;margin:8px 4px;padding:9px 13px;border-radius:12px;text-decoration:none;background:var(--green);color:#fff;font-weight:700}.v80StoryCard .v80StoryVideoBtn{font-size:calc(14px*var(--v105-fs,1))}</style><link rel="stylesheet" href="radius.fb103ec150.css?h=fb103ec150"></head>
-<body><div id="v6Intro" role="presentation" aria-hidden="true"><i class="pat"></i><i class="frame"></i><i class="glow"></i><div class="center"><svg class="moon" viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="iG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff3c4"/><stop offset="1" stop-color="#d9a93f"/></linearGradient><mask id="iM" maskUnits="userSpaceOnUse" x="-20" y="-20" width="140" height="140"><circle class="mring" cx="50" cy="50" r="26"/></mask></defs><g mask="url(#iM)"><path class="mshape" fill="url(#iG)" d="M62 14A38 38 0 1 0 62 86A30 30 0 1 1 62 14Z"/></g><path class="star" fill="url(#iG)" d="M78 36l3.2 7 7.6.9-5.6 5.2 1.5 7.5-6.7-3.8-6.7 3.8 1.5-7.5-5.6-5.2 7.6-.9z"/></svg><div class="bism">بِسْمِ اللهِ الرَّحْمَنِ الرَّحِيمِ</div><h1>المسلم</h1><i class="rule"></i><div class="sub">AL-MUSLIM</div></div><div class="bar"><b></b></div></div>
+<body><div id="v6Intro" role="presentation" aria-hidden="true"><i class="pat"></i><i class="frame"></i><i class="glow"></i><div class="center"><svg class="moon" viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="iG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff3c4"/><stop offset="1" stop-color="#d9a93f"/></linearGradient><mask id="iM" maskUnits="userSpaceOnUse" x="-20" y="-20" width="140" height="140"><circle class="mring" cx="50" cy="50" r="26"/></mask></defs><g mask="url(#iM)"><path class="mshape" fill="url(#iG)" d="M62 14A38 38 0 1 0 62 86A30 30 0 1 1 62 14Z"/></g><path class="star" fill="url(#iG)" d="M78 36l3.2 7 7.6.9-5.6 5.2 1.5 7.5-6.7-3.8-6.7 3.8 1.5-7.5-5.6-5.2 7.6-.9z"/></svg><div class="bism">بِسْمِ اللهِ الرَّحْمَنِ الرَّحِيمِ</div><h1>المسلم</h1><i class="rule"></i><div class="sub">AL-MUSLIM</div></div></div>
 <script>
 (function () {
-    /* مقدمة 3 ثوانٍ (2.6 عرض + 0.4 تلاشي) مرة عند كل فتح. إن أُعيد تحميل الصفحة أثناءها (تحديث صامت) تُكمل من اللحظة نفسها بتأخير سالب فلا يلاحظ المستخدم. */
+    /* مقدمة 5 ثوانٍ (4.6 عرض + 0.4 تلاشي) بلا شريط تقدّم؛ يجري خلالها فحص التحديث الإجباري (updater.js) فلا يرى المستخدم أي أثر لنسخة قديمة. إن أُعيد تحميل الصفحة أثناءها (تحديث صامت) تُكمل من اللحظة نفسها بتأخير سالب فلا يلاحظ المستخدم. */
     var done = 0, e = document.getElementById('v6Intro'), now = Date.now(), t0 = now;
-    try { var o = +sessionStorage.getItem('v6t0'); if (o && now - o < 2600) t0 = o; else sessionStorage.setItem('v6t0', String(now)); } catch (x) { }
+    try { var o = +sessionStorage.getItem('v6t0'); if (o && now - o < 4600) t0 = o; else sessionStorage.setItem('v6t0', String(now)); } catch (x) { }
     var el = now - t0;
     function out() {
         if (done) return; done = 1;
@@ -254,7 +252,7 @@ html{--mushaf-font:28px}
             });
         } catch (x) { }
     }
-    setTimeout(out, Math.max(300, 2600 - el));
+    setTimeout(out, Math.max(300, 4600 - el));
     if (e) e.addEventListener('click', out);
 })();
 </script><div class="app">
@@ -700,7 +698,7 @@ catch (e) {
     console.error(e);
 } }
 async function openReader(i) { readerToken++; currentReader = RECITERS[i]; if (!currentReader)
-    return; readerTitle.textContent = currentReader.name; document.getElementById('readerDetailSubtitle').textContent = 'صفحة القارئ • اختر سورة واستمع'; const readerIndex = RECITERS.indexOf(currentReader); const photo = await getReciterPhoto(currentReader); document.getElementById('readerProfile').innerHTML = `<h3>${xSafe(currentReader.name)}</h3><p class="mini">الرواية: ${xSafe(currentReader.rewaya || 'غير محددة')} • ${currentReader.surahList?.length || 0} سورة متاحة</p><button class="favBtn ${isFavReader(currentReader) ? 'active' : ''}" onclick="toggleFavReader(${readerIndex})">${isFavReader(currentReader) ? '★ في المفضلة' : '☆ إضافة للمفضلة'}</button></div>`; playerReciter.textContent = '🎙️ ' + currentReader.name + ' • ' + currentReader.rewaya; const st = document.getElementById('downloadStatus'); st.style.display = 'block'; st.innerHTML = '⏳ جارٍ التحقق من التلاوة…'; renderSongs(); show('readerDetail'); try {
+    return; readerTitle.textContent = currentReader.name; document.getElementById('readerDetailSubtitle').textContent = 'صفحة القارئ • اختر سورة واستمع'; const readerIndex = RECITERS.indexOf(currentReader); document.getElementById('readerProfile').innerHTML = `<h3>${xSafe(currentReader.name)}</h3><p class="mini">الرواية: ${xSafe(currentReader.rewaya || 'غير محددة')} • ${currentReader.surahList?.length || 0} سورة متاحة</p><button class="favBtn ${isFavReader(currentReader) ? 'active' : ''}" onclick="toggleFavReader(${readerIndex})">${isFavReader(currentReader) ? '★ في المفضلة' : '☆ إضافة للمفضلة'}</button></div>`; playerReciter.textContent = '🎙️ ' + currentReader.name + ' • ' + currentReader.rewaya; const st = document.getElementById('downloadStatus'); st.style.display = 'block'; st.innerHTML = '⏳ جارٍ التحقق من التلاوة…'; renderSongs(); show('readerDetail'); try {
     await ensureAudioUrl((currentReader.surahList || [1])[0]);
     st.style.display = 'none';
     st.innerHTML = '';
@@ -857,41 +855,9 @@ else
     favAdd('adhkar', { id, kind, index: Number(i), text: z.text, count: z.count, source: z.source }); renderAdhkar(currentAdhkarKind || 'صباح'); renderFavorites('adhkar'); }
 function isFavHadith(i) { return readFavStore().hadiths.some(a => a.id === `h-${i}`); }
 function isFavAdhkar(kind, i) { return readFavStore().adhkar.some(a => a.id === `z-${kind}-${i}`); }
-const VERIFIED_RECITER_PHOTOS = {
-    'أحمد بن علي العجمي': 'Ahmad bin Ali Al-Ajmi.png',
-    'سعد الغامدي': 'Saad al Ghamdi.jpg',
-    'سعود الشريم': 'Saud Shuraim doing the Khutbah.png',
-    'عبدالباسط عبدالصمد': "Abdul Basit 'Abd us-Samad with King Faisal.jpg",
-    'عبدالرحمن السديس': 'زيارة الشيخ الدكتور عبدالرحمن بن عبدالعزيز السديس.jpg',
-    'ناصر القطامي': 'صورة شخصية الشيخ ناصر القطامي.jpg',
-    'ياسر الدوسري': 'Yasser Al-Dosari.jpg',
-    'هزاع البلوشي': 'هزاع البلوشي.jpg',
-    'مشاري راشد العفاسي': 'Мишари Рашид.jpg',
-    'صلاح البدير': 'Salah Ibn Mohammed Al Budair.jpg',
-    'صالح آل طالب': 'صورة شخصية صالح آل طالب.jpg',
-    'ماهر المعيقلي': 'Maher Al Mueaqly.png'
-};
-function verifiedReciterPhoto(r) {
-    const file = VERIFIED_RECITER_PHOTOS[String(r?.name || '').trim()];
-    return file ? 'https://commons.wikimedia.org/wiki/Special:Redirect/file/' + encodeURIComponent(file) : '';
-}
-const photoCache = new Map();
-function photoNameScore(title, name) {
-    const t = String(title || '').toLowerCase().replace(/[^\p{L}\p{N}]+/gu, ' ');
-    const n = String(name || '').toLowerCase().replace(/[^\p{L}\p{N}]+/gu, ' ').split(' ').filter(Boolean);
-    if (!n.length)
-        return 0;
-    let score = 0;
-    for (const part of n) {
-        if (part.length > 2 && t.includes(part))
-            score++;
-    }
-    return score / n.length;
-}
-async function getReciterPhoto() { return ''; }
-function reciterAvatar() { return ''; }
-async function hydrateReciterPhotos() { }
-function loadReciterCards(q = '') { const query = (q || '').trim().toLowerCase(); const items = RECITERS.map((r, i) => ({ r, i })).filter(o => readerMatchesFilter(o.r) && (!query || o.r.name.toLowerCase().includes(query) || (o.r.search || []).some(x => String(x).toLowerCase().includes(query)))); readerList.innerHTML = items.map(o => `<div class="reader" data-reciter-index="${o.i}" onclick="openReader(${o.i})"><div class="readerTop"><button class="favBtn ${isFavReader(o.r) ? 'active' : ''}" onclick="event.stopPropagation();toggleFavReader(${o.i})">${isFavReader(o.r) ? '★ مفضل' : '☆ مفضل'}</button></div><b>${xSafe(o.r.name)}</b><small>${xSafe(o.r.rewaya)} • ${o.r.surahList.length} سورة</small></div>`).join('') || '<div class="favEmpty" style="grid-column:1/-1">لا يوجد قارئ/رواية مطابقة.</div>'; hydrateReciterPhotos(); }
+/* آيفون/آيباد بنظام قديم (iOS 15 فما دون) لا يشغّل بعض الملفات الصوتية: نوضّح أن السبب من النظام لا من الموقع */
+function iosOldNote() { const m = /(iPhone|iPad|iPod).*? OS (\d+)[_.]/.exec(navigator.userAgent || ''); return m && +m[2] <= 15 ? ' — السبب من نظام iOS لديك لأنه قديم، حدّث النظام' : ''; }
+function loadReciterCards(q = '') { const query = (q || '').trim().toLowerCase(); const items = RECITERS.map((r, i) => ({ r, i })).filter(o => readerMatchesFilter(o.r) && (!query || o.r.name.toLowerCase().includes(query) || (o.r.search || []).some(x => String(x).toLowerCase().includes(query)))); readerList.innerHTML = items.map(o => `<div class="reader" data-reciter-index="${o.i}" onclick="openReader(${o.i})"><div class="readerTop"><button class="favBtn ${isFavReader(o.r) ? 'active' : ''}" onclick="event.stopPropagation();toggleFavReader(${o.i})">${isFavReader(o.r) ? '★ مفضل' : '☆ مفضل'}</button></div><b>${xSafe(o.r.name)}</b><small>${xSafe(o.r.rewaya)} • ${o.r.surahList.length} سورة</small></div>`).join('') || '<div class="favEmpty" style="grid-column:1/-1">لا يوجد قارئ/رواية مطابقة.</div>';  }
 function renderFavorites(type = 'readers') {
     const box = document.getElementById('favoritesList');
     if (!box)
@@ -1148,7 +1114,7 @@ async function playSurah(num) { if (!currentReader)
 catch (e) {
     const _ec = audio.error ? audio.error.code : 0;
     const _em = { 1: 'أُلغي التحميل', 2: 'خطأ في الشبكة', 3: 'تعذّر فك الترميز', 4: 'الملف غير موجود أو غير مدعوم' }[_ec] || (e && e.name === 'NotAllowedError' ? 'منع المتصفح التشغيل — اضغط تشغيل مرة أخرى' : (e && e.message) || '');
-    now.textContent = '❌ تعذر تشغيل ' + S[num - 1] + ' لهذا القارئ الآن' + (_em ? ' (' + _em + ')' : '');
+    now.textContent = '❌ تعذر تشغيل ' + S[num - 1] + ' لهذا القارئ الآن' + (_em ? ' (' + _em + ')' : '') + iosOldNote();
     console.error(e, audio.src);
 } saveSettings(); }
 function nextSurah() { const a = currentReader?.surahList?.length ? currentReader.surahList : Array.from({ length: 114 }, (_, i) => i + 1), k = a.indexOf(currentSurah), n = a[k < 0 ? 0 : (k + 1) % a.length]; playSurah(n); }
@@ -1886,8 +1852,6 @@ window.openReader = async function (i) {
     const box = document.getElementById('readerProfile');
     if (!r || !box)
         return;
-    const url = await getReciterPhoto(r);
-    const photo = url ? `<img class="profileReciterPhoto" src="${xSafe(url)}" alt="${xSafe(r.name)}" loading="eager" referrerpolicy="no-referrer">` : `<div class="profileReciterPhoto placeholder">🎙️</div>`;
     box.innerHTML = `<h3>${xSafe(r.name)}</h3><p class="mini">الرواية: ${xSafe(r.rewaya || 'غير محددة')} • ${r.surahList?.length || 0} سورة متاحة</p><button class="favBtn ${isFavReader(r) ? 'active' : ''}" onclick="toggleFavReader(${RECITERS.indexOf(r)})">${isFavReader(r) ? '★ في المفضلة' : '☆ إضافة للمفضلة'}</button>`;
 };
 const QP_V27_BASE = 'https://api.quranpedia.net/v1';
@@ -3003,7 +2967,7 @@ catch (e) {
             await playTiming();
         }
         catch (e) {
-            status.textContent = '❌ تعذر تشغيل النطاق. اختر قارئًا آخر أو حاول مرة أخرى.';
+            status.textContent = '❌ تعذر تشغيل النطاق. اختر قارئًا آخر أو حاول مرة أخرى.' + iosOldNote();
             console.error(e);
         }
     };
@@ -12804,10 +12768,10 @@ select.field{min-height:46px;appearance:auto;-webkit-appearance:menulist;backgro
 <link rel="stylesheet" href="style.45bc857fa8.css?h=45bc857fa8"><script src="script.451e714e44.js?h=451e714e44" defer></script>
 <script src="assistant-cmd.2559bdf697.js?h=2559bdf697" defer></script>
 <script src="travel.575fe86c2d.js?h=575fe86c2d" defer></script>
-<script src="reciters-nationality.39101e2556.js?h=39101e2556" defer></script><script src="playlist.29cb6d27a9.js?h=29cb6d27a9" defer></script>
+<script src="reciters-nationality.7cebd14c9a.js?h=7cebd14c9a" defer></script><script src="playlist.29cb6d27a9.js?h=29cb6d27a9" defer></script>
 
 <link rel="stylesheet" href="app107.8a9805e141.css?h=8a9805e141">
-<link rel="stylesheet" href="nova.6db664a882.css?h=6db664a882">
+<link rel="stylesheet" href="nova.0cf1a13428.css?h=0cf1a13428">
 <script src="adhan-config.6ae52d635c.js?h=6ae52d635c"></script>
 <script src="prayer.c5beb1abed.js?h=c5beb1abed"></script>
 <script src="push-client.4214f64b48.js?h=4214f64b48"></script><script src="audio-manager.6c123ab5bd.js?h=6c123ab5bd"></script><script src="notifications.ccce094b18.js?h=ccce094b18"></script><script src="notification-settings.bc601aaa58.js?h=bc601aaa58"></script><script src="prayer-notifications.610021a76a.js?h=610021a76a"></script><script src="iqama-notifications.8e8180306f.js?h=8e8180306f"></script><script src="adhkar-notifications.a924207814.js?h=a924207814"></script><script src="backgrounds.47987948bc.js?h=47987948bc"></script><script src="updater.3d7ad8f0b7.js?h=3d7ad8f0b7"></script>
@@ -12819,6 +12783,6 @@ select.field{min-height:46px;appearance:auto;-webkit-appearance:menulist;backgro
 <script src="abloop.aa1b7fb463.js?h=aa1b7fb463"></script>
 <script src="qibla.07d4df4660.js?h=07d4df4660"></script>
 <script src="app107.e6527ceed0.js?h=e6527ceed0"></script>
-<script src="fuzzy.e42b2ec543.js?h=e42b2ec543"></script><script src="seo.14f40e9542.js?h=14f40e9542" defer></script><script src="assistant-kb.75f239c22f.js?h=75f239c22f" defer></script><script src="perf120.037c390b1c.js?h=037c390b1c" defer></script><script src="kids-salah.2911d944ed.js?h=2911d944ed" defer></script><script src="repeat-plus.00f1fcf10d.js?h=00f1fcf10d" defer></script><script src="quran-test.a105d75e53.js?h=a105d75e53" defer></script><script src="whatsnew.2fbb89deee.js?h=2fbb89deee" defer></script><script src="nova.a201ade04e.js?h=a201ade04e" defer></script>
+<script src="fuzzy.e42b2ec543.js?h=e42b2ec543"></script><script src="seo.26f37a5ced.js?h=26f37a5ced" defer></script><script src="assistant-kb.75f239c22f.js?h=75f239c22f" defer></script><script src="perf120.037c390b1c.js?h=037c390b1c" defer></script><script src="kids-salah.2911d944ed.js?h=2911d944ed" defer></script><script src="repeat-plus.00f1fcf10d.js?h=00f1fcf10d" defer></script><script src="quran-test.a105d75e53.js?h=a105d75e53" defer></script><script src="whatsnew.562cec4c22.js?h=562cec4c22" defer></script><script src="nova.d054f465a1.js?h=d054f465a1" defer></script>
 </body>
 </html>

@@ -5,11 +5,10 @@
  *  3) صفحة التنقّل (index.html): الشبكة أولاً (إعادة تحقق دائماً) مع مهلة 3 ثوانٍ ثم نسخة هذا الإصدار نفسه فقط.
  *     لا يُعاد أبداً أي إصدار أقدم (أُزيلت دالة legacyShell التي كانت تُظهر نسخاً قديمة بلا مصحف).
  */
-const BID = 'd3c577ea78', BT = 1795153462;
+const BID = '9c2b7fe429', BT = 1795169113;
 const CACHE = 'muslim-shell-' + BID;
 const FONTS = 'muslim-fonts-v1';
-const IMG = 'muslim-img-v1', IMG_MAX = 220;
-const CORE = ["./", "./index.html", "./manifest.json", "./app-config.5438345603.js?h=5438345603", "./radius.fb103ec150.css?h=fb103ec150", "./style.45bc857fa8.css?h=45bc857fa8", "./script.451e714e44.js?h=451e714e44", "./assistant-cmd.2559bdf697.js?h=2559bdf697", "./travel.575fe86c2d.js?h=575fe86c2d", "./reciters-nationality.39101e2556.js?h=39101e2556", "./playlist.29cb6d27a9.js?h=29cb6d27a9", "./app107.8a9805e141.css?h=8a9805e141", "./nova.6db664a882.css?h=6db664a882", "./adhan-config.6ae52d635c.js?h=6ae52d635c", "./prayer.c5beb1abed.js?h=c5beb1abed", "./push-client.4214f64b48.js?h=4214f64b48", "./audio-manager.6c123ab5bd.js?h=6c123ab5bd", "./notifications.ccce094b18.js?h=ccce094b18", "./notification-settings.bc601aaa58.js?h=bc601aaa58", "./prayer-notifications.610021a76a.js?h=610021a76a", "./iqama-notifications.8e8180306f.js?h=8e8180306f", "./adhkar-notifications.a924207814.js?h=a924207814", "./backgrounds.47987948bc.js?h=47987948bc", "./updater.3d7ad8f0b7.js?h=3d7ad8f0b7", "./calendar.abb99a59d5.js?h=abb99a59d5", "./radius.f2a462260f.js?h=f2a462260f", "./favorites-ui.6030262305.js?h=6030262305", "./mushaf.f268b897dc.js?h=f268b897dc", "./hadith107.9e2a30c070.js?h=9e2a30c070", "./mosques.01cef142c6.js?h=01cef142c6", "./abloop.aa1b7fb463.js?h=aa1b7fb463", "./qibla.07d4df4660.js?h=07d4df4660", "./app107.e6527ceed0.js?h=e6527ceed0", "./fuzzy.e42b2ec543.js?h=e42b2ec543", "./seo.14f40e9542.js?h=14f40e9542", "./assistant-kb.75f239c22f.js?h=75f239c22f", "./perf120.037c390b1c.js?h=037c390b1c", "./kids-salah.2911d944ed.js?h=2911d944ed", "./repeat-plus.00f1fcf10d.js?h=00f1fcf10d", "./quran-test.a105d75e53.js?h=a105d75e53", "./whatsnew.2fbb89deee.js?h=2fbb89deee", "./nova.a201ade04e.js?h=a201ade04e", "./ic-192.png", "./ic-512.png", "./identity.webp", "./nv-hero-l.webp", "./nv-hero-p.webp", "./nv-quran-l.webp", "./nv-quran-p.webp", "./nv-sky.webp", "./nv-logo.png", "./nv-navc.png", "./nv-i-book.png", "./nv-i-clock.png", "./nv-i-qibla.png", "./nv-i-mosque.png", "./nv-i-quiz.png", "./nv-i-beads.png"];
+const CORE = ["./", "./index.html", "./manifest.json", "./app-config.5438345603.js?h=5438345603", "./radius.fb103ec150.css?h=fb103ec150", "./style.45bc857fa8.css?h=45bc857fa8", "./script.451e714e44.js?h=451e714e44", "./assistant-cmd.2559bdf697.js?h=2559bdf697", "./travel.575fe86c2d.js?h=575fe86c2d", "./reciters-nationality.7cebd14c9a.js?h=7cebd14c9a", "./playlist.29cb6d27a9.js?h=29cb6d27a9", "./app107.8a9805e141.css?h=8a9805e141", "./nova.0cf1a13428.css?h=0cf1a13428", "./adhan-config.6ae52d635c.js?h=6ae52d635c", "./prayer.c5beb1abed.js?h=c5beb1abed", "./push-client.4214f64b48.js?h=4214f64b48", "./audio-manager.6c123ab5bd.js?h=6c123ab5bd", "./notifications.ccce094b18.js?h=ccce094b18", "./notification-settings.bc601aaa58.js?h=bc601aaa58", "./prayer-notifications.610021a76a.js?h=610021a76a", "./iqama-notifications.8e8180306f.js?h=8e8180306f", "./adhkar-notifications.a924207814.js?h=a924207814", "./backgrounds.47987948bc.js?h=47987948bc", "./updater.3d7ad8f0b7.js?h=3d7ad8f0b7", "./calendar.abb99a59d5.js?h=abb99a59d5", "./radius.f2a462260f.js?h=f2a462260f", "./favorites-ui.6030262305.js?h=6030262305", "./mushaf.f268b897dc.js?h=f268b897dc", "./hadith107.9e2a30c070.js?h=9e2a30c070", "./mosques.01cef142c6.js?h=01cef142c6", "./abloop.aa1b7fb463.js?h=aa1b7fb463", "./qibla.07d4df4660.js?h=07d4df4660", "./app107.e6527ceed0.js?h=e6527ceed0", "./fuzzy.e42b2ec543.js?h=e42b2ec543", "./seo.26f37a5ced.js?h=26f37a5ced", "./assistant-kb.75f239c22f.js?h=75f239c22f", "./perf120.037c390b1c.js?h=037c390b1c", "./kids-salah.2911d944ed.js?h=2911d944ed", "./repeat-plus.00f1fcf10d.js?h=00f1fcf10d", "./quran-test.a105d75e53.js?h=a105d75e53", "./whatsnew.562cec4c22.js?h=562cec4c22", "./nova.d054f465a1.js?h=d054f465a1", "./ic-192.png", "./ic-512.png", "./identity.webp", "./nv-hero-l.webp", "./nv-hero-p.webp", "./nv-quran-l.webp", "./nv-quran-p.webp", "./nv-sky.webp"];
 const cm = (req, opt) => caches.open(CACHE).then(c => c.match(req, opt));
 
 const SOFT = ["./bg-1-t.jpg", "./bg-2-t.jpg", "./bg-3-t.jpg", "./bg-4-t.jpg", "./bg-5-t.jpg", "./bg-6-t.jpg", "./bg-7-t.jpg", "./bg-8-t.jpg", "./bg-9-t.jpg", "./bg-10-t.jpg", "./bg-11-t.jpg", "./bg-12-t.jpg", "./bg-13-t.jpg", "./bg-14-t.jpg", "./bg-15-t.jpg", "./bg-16-t.jpg", "./bg-1.jpg", "./bg-2.jpg", "./bg-3.jpg", "./bg-4.jpg", "./bg-5.jpg", "./bg-6.jpg", "./bg-7.jpg", "./bg-8.jpg", "./bg-9.jpg", "./bg-10.jpg", "./bg-11.jpg", "./bg-12.jpg", "./bg-13.jpg", "./bg-14.jpg", "./bg-15.jpg", "./bg-16.jpg", "./adhan-libya-takbeer.mp3", "./adhan-makkah-takbeer.mp3", "./adhan-qatami-takbeer.mp3"];
@@ -110,25 +109,10 @@ self.addEventListener('fetch', e => {
         e.respondWith(swr(e));
         return;
     }
-    if (d === 'image' && /^https?:$/.test(url.protocol)) { e.respondWith(imgFirst(e)); return; }
     if (url.hostname === 'fonts.googleapis.com' || url.hostname === 'fonts.gstatic.com') {
         e.respondWith(caches.open(FONTS).then(c => c.match(req)).then(hit => { const net = fetch(req).then(r => put(FONTS, req, r)).catch(() => null); if (hit) { e.waitUntil(net); return hit; } return net.then(r => r || Response.error()); }));
     }
 });
-
-/* صور خارجية (صور القرّاء…): من الكاش أولاً، وتُحفظ عند أول جلب (حتى المعتّمة opaque) فتظهر بلا إنترنت؛ الحدّ الأعلى IMG_MAX صورة */
-async function imgFirst(e) {
-    const c = await caches.open(IMG), hit = await c.match(e.request);
-    if (hit) return hit;
-    try {
-        const r = await fetch(e.request);
-        if (r && (r.ok || r.type === 'opaque')) {
-            const copy = r.clone();
-            e.waitUntil(c.put(e.request, copy).then(async () => { const ks = await c.keys(); for (let i = 0; i < ks.length - IMG_MAX; i++) await c.delete(ks[i]); }).catch(() => { }));
-        }
-        return r;
-    } catch (err) { return Response.error(); }
-}
 
 /* ===== جدول التنبيهات المحلي (يقرأ IndexedDB التي تكتبها الصفحة) ===== */
 function idb() {
