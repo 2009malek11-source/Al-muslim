@@ -86,9 +86,14 @@
     var TABS = [['dash', 'الإحصاءات'], ['feat', 'مركز الميزات'], ['ann', 'الإعلانات'], ['msg', 'رسائل الزوار'], ['gen', 'إعدادات عامة'], ['usage', 'استهلاك الخطة المجانية'], ['health', 'الصحة والأخطاء'], ['log', 'سجل النشاط'], ['acc', 'الحساب والجلسات'], ['ver', 'النسخ والإصدارات']];
     function shell() {
         clear(app); var main = h('section', { cls: 'main', id: 'main' });
-        var nav = h('nav', null, [h('h2', { text: 'مركز تحكم المسلم' })].concat(TABS.map(function (t) { return h('button', { type: 'button', cls: view === t[0] ? 'on' : '', text: t[1], onclick: function () { view = t[0]; shell(); } }); }), [h('div', { cls: 'sp' }), h('button', { type: 'button', text: 'تبديل السمة', onclick: function () { var r = document.documentElement; r.setAttribute('data-t', r.getAttribute('data-t') === 'dark' ? 'light' : 'dark'); } }), h('button', { type: 'button', text: 'خروج من هذا الجهاز', onclick: logoutLocal })]));
+        var X = (window.__admX && window.__admX.tabs) || [], API = { h: h, clear: clear, toast: toast, ar: ar, ago: ago, confirmBox: confirmBox, rest: rest, rpc: rpc, raw: raw, card: card, stat: stat, list: list, sw: sw, reload: function () { shell(); }, token: function () { return S && S.access; }, K: K, U: U };
+        var ALL = TABS.concat(X.map(function (x) { return [x[0], x[1]]; }));
+        var nav = h('nav', null, [h('h2', { text: 'مركز تحكم المسلم' })].concat(ALL.map(function (t) { return h('button', { type: 'button', cls: view === t[0] ? 'on' : '', text: t[1], onclick: function () { view = t[0]; shell(); } }); }), [h('div', { cls: 'sp' }), h('button', { type: 'button', text: 'تبديل السمة', onclick: function () { var r = document.documentElement; r.setAttribute('data-t', r.getAttribute('data-t') === 'dark' ? 'light' : 'dark'); } }), h('button', { type: 'button', text: 'خروج من هذا الجهاز', onclick: logoutLocal })]));
         app.appendChild(h('div', { cls: 'shell' }, [nav, main]));
         var V = { dash: dash, feat: feat, ann: ann, msg: msgs, gen: gen, usage: usage, health: health, log: actlog, acc: acc, ver: ver }[view];
+        if (!V) X.forEach(function (x) { if (x[0] === view) V = function () { return x[2](API); }; });
+        if (!V) { view = 'dash'; V = dash; }
+        try { if (window.__admX && window.__admX.after) window.__admX.after(API, nav); } catch (e) { }
         main.appendChild(h('div', { cls: 'mut', text: 'جارٍ التحميل…' }));
         Promise.resolve().then(function () { return V(); }).then(function (el) { clear(main); main.appendChild(el); }).catch(function (e) { clear(main); main.appendChild(h('div', { cls: 'card err', text: 'تعذّر التحميل: ' + e.message })); });
     }
@@ -214,7 +219,7 @@
 
     /* ---------- النسخ والإصدارات ---------- */
     function ver() {
-        return fetch('/version.json', { cache: 'no-store' }).then(function (r) { return r.ok ? r.json() : {}; }).catch(function () { return {}; }).then(function (v) {
+        return fetch('version.json', { cache: 'no-store' }).then(function (r) { return r.ok ? r.json() : {}; }).catch(function () { return {}; }).then(function (v) {
             function exp(name, q) { return h('button', { cls: 'btn alt', type: 'button', text: 'تصدير ' + name + ' (JSON)', onclick: function () { rest(q).then(function (d) { var a = h('a', { href: URL.createObjectURL(new Blob([JSON.stringify(d, null, 2)], { type: 'application/json' })), download: 'almuslim-' + name + '-' + new Date().toISOString().slice(0, 10) + '.json' }); document.body.appendChild(a); a.click(); a.remove(); log('export', { name: name }); }).catch(function (e) { toast(e.message); }); } }); }
             return h('div', null, [h('h3', { text: 'النسخ الاحتياطي والإصدارات' }),
                 card('النسخ الاحتياطي — ما هو متاح فعلًا', [h('div', { cls: 'mut', text: 'الخطة المجانية في Supabase لا توفّر نسخًا قابلة للتنزيل ولا استرجاعًا لنقطة زمنية، ولن يُفعَّل أي شيء مدفوع. البديل المجاني: تصدير بيانات الإعدادات إلى ملف JSON تحفظه عندك.' }), h('div', { cls: 'row' }, [exp('الميزات', 'features?select=*'), exp('الإعدادات', 'site_settings?select=*'), exp('الإعلانات', 'announcements?select=*'), exp('الإحصاءات', 'stats_daily?select=*&limit=10000')])]),
