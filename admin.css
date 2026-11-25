@@ -40,3 +40,8 @@ table{width:100%;border-collapse:collapse;font-size:.92em}th,td{padding:7px 6px;
 .badge{display:inline-block;margin-inline-start:6px;min-width:20px;padding:0 6px;border-radius:99px;background:var(--bad);color:#fff;font-size:.8em;text-align:center}
 .pv{border:1px dashed var(--line);border-radius:12px;padding:10px;display:grid;gap:6px}.pvbar{background:var(--warn);color:#fff;padding:8px;border-radius:8px;text-align:center}
 .ovx{overflow:auto}.pre{white-space:pre-wrap;margin:6px 0}
+
+.hint{border:1px dashed var(--line);border-radius:12px;padding:8px 12px;margin:0 0 12px;background:var(--card)}.hint summary{cursor:pointer;color:var(--g);font-weight:600}
+.bub{padding:8px 10px;border-radius:12px;border:1px solid var(--line);margin:4px 0;overflow-wrap:anywhere;white-space:pre-wrap}.bub.adm{background:var(--bg);border-color:var(--g)}.bub.usr{background:var(--card)}
+.chart{width:100%;height:auto;max-height:200px}.chart .bar{fill:var(--g)}.chart .lbl{fill:var(--mut);font-size:8px}
+.thm{margin:12px 8px;min-height:40px;border-radius:12px;border:1px solid rgba(255,255,255,.3);background:transparent;color:inherit;cursor:pointer}

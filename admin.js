@@ -83,7 +83,7 @@
     function logoutLocal() { var t = S && S.access; S = null; save(); if (t) raw('/auth/v1/logout?scope=local', { method: 'POST', tok: t }).catch(function () { }); loginView(); }
 
     /* ---------- الهيكل ---------- */
-    var TABS = [['dash', 'الإحصاءات'], ['feat', 'مركز الميزات'], ['ann', 'الإعلانات'], ['msg', 'رسائل الزوار'], ['gen', 'إعدادات عامة'], ['usage', 'استهلاك الخطة المجانية'], ['health', 'الصحة والأخطاء'], ['log', 'سجل النشاط'], ['acc', 'الحساب والجلسات'], ['ver', 'النسخ والإصدارات']];
+    var TABS = [['dash', 'الإحصاءات'], ['feat', 'مركز الميزات'], ['ann', 'الإعلانات'], ['msg', 'رسائل الزوار'], ['gen', 'إعدادات عامة'], ['usage', 'استهلاك الخطة المجانية'], ['health', 'الصحة والأخطاء'], ['log', 'سجل النشاط'], ['acc', 'إعدادات الحساب'], ['ver', 'النسخ والإصدارات']];
     function shell() {
         clear(app); var main = h('section', { cls: 'main', id: 'main' });
         var X = (window.__admX && window.__admX.tabs) || [], API = { h: h, clear: clear, toast: toast, ar: ar, ago: ago, confirmBox: confirmBox, rest: rest, rpc: rpc, raw: raw, card: card, stat: stat, list: list, sw: sw, reload: function () { shell(); }, token: function () { return S && S.access; }, K: K, U: U };
@@ -95,7 +95,7 @@
         if (!V) { view = 'dash'; V = dash; }
         try { if (window.__admX && window.__admX.after) window.__admX.after(API, nav); } catch (e) { }
         main.appendChild(h('div', { cls: 'mut', text: 'جارٍ التحميل…' }));
-        Promise.resolve().then(function () { return V(); }).then(function (el) { clear(main); main.appendChild(el); }).catch(function (e) { clear(main); main.appendChild(h('div', { cls: 'card err', text: 'تعذّر التحميل: ' + e.message })); });
+        Promise.resolve().then(function () { return V(); }).then(function (el) { clear(main); main.appendChild(el); try { var tp = (window.__admX && window.__admX.tips || {})[view]; if (tp) main.insertBefore(h('details', { cls: 'hint' }, [h('summary', { text: 'ℹ️ شرح هذه الصفحة' }), h('div', { cls: 'mut pre', text: tp })]), main.firstChild); } catch (e) { } }).catch(function (e) { clear(main); main.appendChild(h('div', { cls: 'card err', text: 'تعذّر التحميل: ' + e.message })); });
     }
     function sw(on, fn) { var i = h('input', { type: 'checkbox' }); i.checked = !!on; i.addEventListener('change', function () { fn(i.checked, i); }); return h('label', { cls: 'sw' }, [i, h('i')]); }
     function card(title, kids) { return h('div', { cls: 'card' }, [title ? h('h3', { text: title }) : null].concat(kids)); }
@@ -205,15 +205,15 @@
         var cur = jwt(S.access).session_id;
         return rpc('admin_list_sessions').then(function (ss) {
             var u = h('input', { value: me.username, dir: 'ltr', autocomplete: 'off' }), pw = h('input', { type: 'password', autocomplete: 'current-password', dir: 'ltr' }), er = h('div', { cls: 'err' });
-            var c1 = h('input', { type: 'password', autocomplete: 'current-password', dir: 'ltr' }), n1 = h('input', { type: 'password', autocomplete: 'new-password', dir: 'ltr' }), er2 = h('div', { cls: 'err' });
-            return h('div', null, [h('h3', { text: 'الحساب والجلسات' }),
+            var c1 = h('input', { type: 'password', autocomplete: 'current-password', dir: 'ltr' }), n1 = h('input', { type: 'password', autocomplete: 'new-password', dir: 'ltr' }), n2 = h('input', { type: 'password', autocomplete: 'new-password', dir: 'ltr' }), er2 = h('div', { cls: 'err' });
+            return h('div', null, [h('h3', { text: 'إعدادات الحساب' }),
                 card('الأجهزة المسجَّل دخولها', (ss || []).map(function (s) { var isMe = s.id === cur; return h('div', { cls: 'row' }, [h('div', null, [h('b', { text: (isMe ? 'هذا الجهاز · ' : '') + (s.user_agent || 'جهاز غير معروف').slice(0, 70) }), h('div', { cls: 'mut', text: 'آخر نشاط: ' + ago(s.refreshed_at || s.updated_at || s.created_at) })]), isMe ? h('span', { cls: 'tag ok', text: 'الحالية' }) : h('button', { cls: 'btn bad sm', type: 'button', text: 'إنهاء هذه الجلسة', onclick: function () { confirmBox('تسجيل الخروج من هذا الجهاز؟', true).then(function (ok) { if (ok) rpc('admin_revoke_session', { p_id: s.id }).then(function () { log('session.revoke', {}); toast('أُنهيت'); shell(); }).catch(function (e) { toast(e.message); }); }); } })]); }).concat([h('div', { cls: 'row' }, [
                     h('button', { cls: 'btn alt', type: 'button', text: 'خروج من هذا الجهاز', onclick: logoutLocal }),
                     h('button', { cls: 'btn alt', type: 'button', text: 'خروج من الأجهزة الأخرى', onclick: function () { confirmBox('إنهاء كل الجلسات الأخرى؟', true).then(function (ok) { if (ok) rpc('admin_revoke_others').then(function () { toast('تم'); shell(); }); }); } }),
                     h('button', { cls: 'btn bad', type: 'button', text: 'خروج من جميع الأجهزة', onclick: function () { confirmBox('سيُنهى الدخول على كل الأجهزة بما فيها هذا. متابعة؟', true).then(function (ok) { if (ok) rpc('admin_revoke_all').then(function () { S = null; save(); loginView('أُنهيت كل الجلسات'); }); }); } }),
                     h('button', { cls: 'btn alt', type: 'button', text: 'إعادة التحقق من الصلاحيات', onclick: function () { rpc('admin_recheck').then(function () { toast('الصلاحيات سليمة ✔'); }).catch(function (e) { toast(e.message); }); } })])])),
                 card('تغيير اسم المستخدم', [h('label', null, ['اسم المستخدم الجديد (حروف لاتينية وأرقام و _ . -)', u]), h('label', null, ['كلمة المرور الحالية للتأكيد', pw]), er, h('button', { cls: 'btn', type: 'button', text: 'حفظ الاسم', onclick: function () { rpc('admin_change_username', { p_new: u.value.trim(), p_password: pw.value }).then(function () { me.username = u.value.trim(); pw.value = ''; toast('تم التغيير'); }).catch(function (e) { er.textContent = e.message; }); } })]),
-                card('تغيير كلمة المرور', [h('label', null, ['الحالية', c1]), h('label', null, ['الجديدة (12 حرفًا فأكثر)', n1]), er2, h('button', { cls: 'btn', type: 'button', text: 'حفظ كلمة المرور', onclick: function () { if (n1.value.length < 12) { er2.textContent = 'يجب ألا تقل عن 12 حرفًا'; return; } rpc('admin_change_password', { p_current: c1.value, p_new: n1.value }).then(function () { c1.value = n1.value = ''; toast('تم التغيير'); }).catch(function (e) { er2.textContent = e.message; }); } })])]);
+                card('تغيير كلمة المرور', [h('label', null, ['الحالية', c1]), h('label', null, ['الجديدة (12 حرفًا فأكثر؛ أحرف إنجليزية وأرقام ورموز)', n1]), h('label', null, ['تأكيد كلمة المرور الجديدة', n2]), er2, h('button', { cls: 'btn', type: 'button', text: 'حفظ كلمة المرور', onclick: function () { er2.className = 'err'; if (n1.value.length < 12) { er2.textContent = 'يجب ألا تقل عن 12 حرفًا'; return; } if (n1.value !== n2.value) { er2.textContent = 'التأكيد لا يطابق كلمة المرور الجديدة'; return; } rpc('admin_change_password', { p_current: c1.value, p_new: n1.value }).then(function () { c1.value = n1.value = n2.value = ''; er2.className = 'ok'; er2.textContent = '✔ تم تغيير كلمة المرور بنجاح. بقيت جلسة هذا الجهاز، وأُنهيت الجلسات الأخرى.'; toast('تم التغيير'); }).catch(function (e) { er2.textContent = e.message; }); } })])]);
         });
     }
 

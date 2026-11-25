@@ -52,7 +52,8 @@
     /* ============ الزوار ============ */
     function visitors(A) {
         var h = A.h, F = { cc: '', dev: '', st: '', q: '' };
-        var out = h('div'), body = h('div');
+        var out = h('div'), body = h('div'), chartBox = h('div');
+        A.rest('stats_daily?select=day,value&metric=eq.visits&order=day.desc&limit=14').then(function (z) { z = (z || []).reverse(); chartBox.appendChild(z.length ? chart(h, z.map(function (x) { return { l: x.day.slice(5), v: +x.value }; }), 'الزيارات اليومية') : h('div', { cls: 'mut', text: 'لا بيانات بعد' })); }).catch(function () { });
         function load() {
             var q = 'visitors?select=*&order=last_seen.desc&limit=200';
             if (F.cc) q += '&country=eq.' + encodeURIComponent(F.cc); if (F.dev) q += '&device=eq.' + encodeURIComponent(F.dev);
@@ -77,6 +78,7 @@
             }
             var qi = h('input', { placeholder: 'بحث: معرّف / مدينة / قسم' }); qi.addEventListener('input', function () { F.q = qi.value; draw(rows); });
             body.appendChild(h('div', { cls: 'grid' }, [A.stat(A.ar(S.online), 'متصل الآن'), A.stat(A.ar(S.total), 'إجمالي الزوار (معرّفات)'), A.stat(A.ar(S.new24), 'جدد آخر ٢٤ ساعة'), A.stat(A.ar(S.ret24), 'عائدون آخر ٢٤ ساعة')]));
+            body.appendChild(A.card('الزيارات — آخر 14 يومًا', [chartBox]));
             body.appendChild(A.card('خريطة الزوار حسب الدولة', [mapView(h, counts, function (cc) { F.cc = cc; cs.value = cc; shellReload(); })]));
             var bs = {}; (S.bySection || []).forEach(function (x) { bs[x.s] = x.n; });
             body.appendChild(A.card('الزوار المتصلون الآن حسب القسم', [A.list(bs, SECN)]));
@@ -220,20 +222,44 @@
     }
 
     /* ============ البلاغات ============ */
-    var RC = { mushaf: 'المصحف', audio: 'الصوت', reciter: 'قارئ لا يعمل', prayer: 'مواقيت الصلاة', design: 'التصميم', slow: 'بطء', other: 'أخرى' }, RS = { new: 'جديد', reviewing: 'قيد المراجعة', fixing: 'قيد الإصلاح', fixed: 'تم الحل', rejected: 'مرفوض' };
+    var RC = { mushaf: 'المصحف', audio: 'الصوت', reciter: 'قارئ لا يعمل', prayer: 'مواقيت الصلاة', design: 'التصميم', slow: 'بطء', other: 'أخرى' }, RS = { new: 'جديد', reviewing: 'قيد المراجعة', waiting_user: 'بانتظار رد المستخدم', fixing: 'قيد الإصلاح', fixed: 'تم الحل', rejected: 'مرفوض' };
+    function copy(A, text) { var done = function () { A.toast('نُسخ'); }; if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, function () { A.toast('تعذّر النسخ'); }); else { var t = A.h('textarea'); t.value = text; document.body.appendChild(t); t.select(); try { document.execCommand('copy'); done(); } catch (e) { A.toast('تعذّر النسخ'); } t.remove(); } }
+    function diag(r, dv, ev, ver) {
+        var L = ['# تقرير تشخيص — موقع المسلم', '(منظَّم ليُلصق في ChatGPT يدويًا؛ لا يحوي أسرارًا)', '', '## البلاغ', 'الرقم: ' + r.code, 'النوع: ' + (RC[r.category] || r.category), 'القسم: ' + sn(r.section), 'الحالة: ' + (RS[r.status] || r.status), 'الوقت: ' + dt(r.at), 'النص: ' + r.message, ''];
+        if (r.solution) L.push('الحل المطبّق سابقًا: ' + r.solution, '');
+        L.push('## الجهاز');
+        if (dv) L.push('الرقم التسلسلي: #' + dv.serial, 'الجهاز/النظام/المتصفح: ' + [DEVN[dv.device] || dv.device, dv.os, dv.browser].join(' / '), 'الشاشة: ' + (dv.scr || '—'), 'الموقع التقريبي: ' + cname(dv.country) + (dv.city ? ' - ' + dv.city : ''), 'زيارات: ' + dv.visits + ' | أول ظهور: ' + dt(dv.first_seen)); else L.push('غير متوفر');
+        L.push('', '## إصدار الموقع', String((ver && (ver.version || ver.build)) || 'غير متاح'), '', '## آخر الأخطاء والأحداث (7 أيام)');
+        (ev || []).slice(0, 25).forEach(function (e) { L.push('- ' + dt(e.at) + ' [' + e.kind + '] ' + (e.section ? sn(e.section) + ' ' : '') + (e.detail || '')); });
+        if (!(ev || []).length) L.push('لا أحداث مسجّلة');
+        L.push('', '## المطلوب', 'حلّل السبب المحتمل للمشكلة، واقترح خطوات تحقق مرتبة، ثم الإصلاح المقترح للكود أو الإعداد، مع التنبيه لأي معلومة ناقصة.');
+        return L.join('\n');
+    }
     function reports(A) {
-        var h = A.h, F = (window.__rpF = window.__rpF || { st: '', cat: '', arch: 'false' });
+        var h = A.h, F = (window.__rpF = window.__rpF || { st: '', cat: '', arch: 'false', q: '' });
         var q = 'reports?select=*&order=priority.desc,at.desc&limit=150&archived=eq.' + F.arch + (F.st ? '&status=eq.' + F.st : '') + (F.cat ? '&category=eq.' + F.cat : '');
         return A.rest(q).then(function (L) {
-            function up(id, p) { return A.rest('reports?id=eq.' + id, { method: 'PATCH', body: Object.assign({ updated_at: new Date().toISOString() }, p), prefer: 'return=minimal' }); }
-            var cards = L.map(function (r) {
-                var sol = h('textarea', { maxlength: 500, placeholder: 'الحل المطبّق' }); sol.value = r.solution || '';
-                return h('div', { cls: 'card' }, [h('div', { cls: 'row' }, [h('div', null, [tag(h, RC[r.category] || r.category), ' ', tag(h, 'القسم: ' + sn(r.section)), ' ', tag(h, RS[r.status], r.status === 'fixed' ? 'ok' : r.status === 'new' ? 'warn' : '')]), h('span', { cls: 'mut', text: dt(r.at) + ' · مجهول' })]),
-                    h('div', { text: r.message, cls: 'pre' }),
-                    h('div', { cls: 'filters' }, [sel(h, Object.keys(RC).map(function (k) { return [k, RC[k]]; }), r.category, function (v) { up(r.id, { category: v }); }), sel(h, [[3, 'أولوية عالية'], [2, 'متوسطة'], [1, 'منخفضة']], r.priority, function (v) { up(r.id, { priority: +v }); }), sel(h, Object.keys(RS).map(function (k) { return [k, RS[k]]; }), r.status, function (v) { up(r.id, { status: v }).then(function () { A.toast('حُدّثت الحالة'); }); })]),
-                    h('label', null, ['الحل المطبّق', sol]), h('div', { cls: 'row' }, [h('button', { cls: 'btn alt sm', type: 'button', text: 'حفظ الحل', onclick: function () { up(r.id, { solution: sol.value.trim() }).then(function () { A.toast('حُفظ'); }); } }), h('button', { cls: 'btn alt sm', type: 'button', text: r.archived ? 'إلغاء الأرشفة' : 'أرشفة', onclick: function () { up(r.id, { archived: !r.archived }).then(function () { A.reload(); }); } })])]);
+            var ids = L.map(function (r) { return r.id; }), vids = L.map(function (r) { return r.vid; }).filter(Boolean).filter(function (v, i, a) { return a.indexOf(v) === i; });
+            return Promise.all([ids.length ? A.rest('report_messages?select=*&order=at.asc&report_id=in.(' + ids.join(',') + ')') : [], vids.length ? A.rest('visitors?select=vid,serial,device,os,browser,country,city,scr,visits,first_seen&vid=in.(' + vids.join(',') + ')') : [], fetch('version.json', { cache: 'no-store' }).then(function (r) { return r.ok ? r.json() : {}; }).catch(function () { return {}; })]).then(function (x) {
+                var M = {}; (x[0] || []).forEach(function (m) { (M[m.report_id] = M[m.report_id] || []).push(m); }); var V = {}, ver = x[2]; (x[1] || []).forEach(function (v) { V[v.vid] = v; });
+                function up(id, p) { return A.rest('reports?id=eq.' + id, { method: 'PATCH', body: Object.assign({ updated_at: new Date().toISOString() }, p), prefer: 'return=minimal' }); }
+                var qs = (F.q || '').toLowerCase(); var rows = L.filter(function (r) { return !qs || (r.code + ' ' + r.message + ' ' + (V[r.vid] ? '#' + V[r.vid].serial : '')).toLowerCase().indexOf(qs) > -1; });
+                var cards = rows.map(function (r) {
+                    var dv = V[r.vid], sol = h('textarea', { maxlength: 500, placeholder: 'الحل المطبّق' }), rep = h('textarea', { maxlength: 800, placeholder: 'ردّ على صاحب البلاغ (يراه بصفحة المتابعة)' }), rst = sel(h, [['waiting_user', 'بانتظار رد المستخدم'], ['reviewing', 'قيد المراجعة'], ['fixing', 'قيد الإصلاح'], ['fixed', 'تم الحل'], ['rejected', 'مرفوض']], 'waiting_user'); sol.value = r.solution || '';
+                    var th = (M[r.id] || []).map(function (m) { return h('div', { cls: 'bub ' + (m.from_admin ? 'adm' : 'usr'), text: (m.from_admin ? 'الإدارة: ' : 'صاحب البلاغ: ') + m.body + ' — ' + dt(m.at) }); });
+                    return h('div', { cls: 'card' }, [h('div', { cls: 'row' }, [h('div', null, [tag(h, RC[r.category] || r.category), ' ', tag(h, 'القسم: ' + sn(r.section)), ' ', tag(h, RS[r.status], r.status === 'fixed' ? 'ok' : r.status === 'new' ? 'warn' : '')]), h('span', { cls: 'mut', text: r.code + ' · ' + dt(r.at) })]),
+                        h('div', { text: r.message, cls: 'pre' }),
+                        dv ? h('div', { cls: 'mut', text: 'الجهاز #' + dv.serial + ' — ' + (DEVN[dv.device] || '') + ' · ' + dv.os + ' · ' + dv.browser + ' · ' + cname(dv.country) }) : h('div', { cls: 'mut', text: 'لا ملف جهاز مرتبط (ربما حُذف لقدمه).' })].concat(th, [
+                        h('div', { cls: 'filters' }, [sel(h, Object.keys(RC).map(function (k) { return [k, RC[k]]; }), r.category, function (v) { up(r.id, { category: v }); }), sel(h, [[3, 'أولوية عالية'], [2, 'متوسطة'], [1, 'منخفضة']], r.priority, function (v) { up(r.id, { priority: +v }); }), sel(h, Object.keys(RS).map(function (k) { return [k, RS[k]]; }), r.status, function (v) { up(r.id, { status: v }).then(function () { A.toast('حُدّثت الحالة'); }); })]),
+                        h('label', null, ['الرد على صاحب البلاغ', rep]), h('div', { cls: 'row' }, [rst, h('button', { cls: 'btn sm', type: 'button', text: 'إرسال الرد', onclick: function () { if (!rep.value.trim()) { A.toast('اكتب الرد'); return; } A.rpc('admin_reply_report', { p_id: r.id, p_body: rep.value.trim(), p_status: rst.value }).then(function () { A.toast('أُرسل الرد'); A.reload(); }).catch(function (e) { A.toast(e.message); }); } })]),
+                        h('label', null, ['الحل المطبّق', sol]),
+                        h('div', { cls: 'row' }, [h('button', { cls: 'btn alt sm', type: 'button', text: 'حفظ الحل', onclick: function () { up(r.id, { solution: sol.value.trim() }).then(function () { A.toast('حُفظ'); }); } }),
+                            h('button', { cls: 'btn alt sm', type: 'button', text: 'نسخ تقرير التشخيص (لـ ChatGPT)', onclick: function () { (r.vid ? A.rest('device_events?select=*&order=at.desc&limit=25&vid=eq.' + r.vid) : Promise.resolve([])).then(function (ev) { copy(A, diag(r, dv, ev, ver)); }); } }),
+                            h('button', { cls: 'btn alt sm', type: 'button', text: r.archived ? 'إلغاء الأرشفة' : 'أرشفة', onclick: function () { up(r.id, { archived: !r.archived }).then(function () { A.reload(); }); } })])]));
+                });
+                var qi = h('input', { placeholder: 'بحث: رقم المتابعة / نص / #جهاز', value: F.q }); qi.addEventListener('change', function () { F.q = qi.value; A.reload(); });
+                return h('div', null, [h('h3', { text: 'مركز البلاغات' }), h('div', { cls: 'filters' }, [qi, sel(h, [['', 'كل الحالات']].concat(Object.keys(RS).map(function (k) { return [k, RS[k]]; })), F.st, function (v) { F.st = v; A.reload(); }), sel(h, [['', 'كل الأنواع']].concat(Object.keys(RC).map(function (k) { return [k, RC[k]]; })), F.cat, function (v) { F.cat = v; A.reload(); }), sel(h, [['false', 'النشطة'], ['true', 'المؤرشفة']], F.arch, function (v) { F.arch = v; A.reload(); })])].concat(cards.length ? cards : [h('div', { cls: 'mut', text: 'لا بلاغات.' })]));
             });
-            return h('div', null, [h('h3', { text: 'مركز البلاغات' }), h('div', { cls: 'filters' }, [sel(h, [['', 'كل الحالات']].concat(Object.keys(RS).map(function (k) { return [k, RS[k]]; })), F.st, function (v) { F.st = v; A.reload(); }), sel(h, [['', 'كل الأنواع']].concat(Object.keys(RC).map(function (k) { return [k, RC[k]]; })), F.cat, function (v) { F.cat = v; A.reload(); }), sel(h, [['false', 'النشطة'], ['true', 'المؤرشفة']], F.arch, function (v) { F.arch = v; A.reload(); })])].concat(cards.length ? cards : [h('div', { cls: 'mut', text: 'لا بلاغات.' })]));
         });
     }
 
@@ -254,10 +280,107 @@
         });
     }
 
+    /* ============ رسم بياني بسيط (SVG) ============ */
+    function chart(h, data, title) {
+        var NS = 'http://www.w3.org/2000/svg', W = 320, H = 120, P = 18, mx = Math.max.apply(null, data.map(function (d) { return d.v; }).concat(1)), bw = (W - P * 2) / Math.max(data.length, 1);
+        var s = document.createElementNS(NS, 'svg'); s.setAttribute('viewBox', '0 0 ' + W + ' ' + (H + 22)); s.setAttribute('class', 'chart'); s.setAttribute('role', 'img'); s.setAttribute('aria-label', title || 'رسم بياني');
+        data.forEach(function (d, i) {
+            var bh = Math.round((H - 14) * d.v / mx), r = document.createElementNS(NS, 'rect'); r.setAttribute('x', P + i * bw + 2); r.setAttribute('y', H - bh); r.setAttribute('width', Math.max(bw - 4, 2)); r.setAttribute('height', bh); r.setAttribute('rx', 3); r.setAttribute('class', 'bar');
+            var tt = document.createElementNS(NS, 'title'); tt.textContent = d.l + ': ' + d.v; r.appendChild(tt); s.appendChild(r);
+            if (data.length <= 16 || i % 2 === 0) { var x = document.createElementNS(NS, 'text'); x.setAttribute('x', P + i * bw + bw / 2); x.setAttribute('y', H + 14); x.setAttribute('text-anchor', 'middle'); x.setAttribute('class', 'lbl'); x.textContent = d.l; s.appendChild(x); }
+        });
+        return s;
+    }
+
+    /* ============ مركز الأجهزة الذكي ============ */
+    function devices(A) {
+        var h = A.h, F = (window.__dvF = window.__dvF || { q: '', cc: '', dev: '' }), since = iso(Date.now() - 7 * 86400000);
+        var q = 'visitors?select=*&order=last_seen.desc&limit=150' + (F.cc ? '&country=eq.' + F.cc : '') + (F.dev ? '&device=eq.' + F.dev : '');
+        return Promise.all([A.rest(q), A.rest('device_events?select=vid,detail,at&kind=eq.error&at=gte.' + since + '&order=at.desc&limit=500')]).then(function (r) {
+            var D = r[0] || [], E = r[1] || [], errCnt = {}, rep = {}; E.forEach(function (e) { errCnt[e.vid] = (errCnt[e.vid] || 0) + 1; var k = (e.detail || '').slice(0, 90); rep[k] = rep[k] || { n: 0, v: {} }; rep[k].n++; rep[k].v[e.vid] = 1; });
+            var repeated = {}; Object.keys(rep).filter(function (k) { return rep[k].n >= 3; }).forEach(function (k) { repeated[k + ' (' + Object.keys(rep[k].v).length + ' جهاز)'] = rep[k].n; });
+            var qs = (F.q || '').toLowerCase(), rows = D.filter(function (v) { return !qs || (v.vid + ' #' + v.serial + ' ' + (v.city || '') + ' ' + cname(v.country) + ' ' + (v.ip_mask || '')).toLowerCase().indexOf(qs) > -1; });
+            var detail = h('div');
+            function open(v) {
+                detail.textContent = '';
+                Promise.all([A.rest('device_events?select=*&order=at.desc&limit=80&vid=eq.' + v.vid), A.rest('reports?select=id,code,category,status,at&order=at.desc&limit=20&vid=eq.' + v.vid), A.rest('visitor_messages?select=*&order=created_at.desc&limit=30&vkey=eq.' + v.vid)]).then(function (x) {
+                    var ev = x[0] || [], rp = x[1] || [], ms = x[2] || [], ti = h('input', { maxlength: 100, placeholder: 'عنوان الرسالة' }), bo = h('textarea', { maxlength: 800, placeholder: 'نص الرسالة' }), on = Date.now() - new Date(v.last_seen) < 180000;
+                    detail.appendChild(A.card('ملف الجهاز #' + v.serial, [
+                        h('div', { cls: 'grid' }, [A.stat('#' + v.serial, 'الرقم التسلسلي'), A.stat(on ? 'متصل' : 'غير متصل', 'الحالة'), A.stat(A.ar(v.visits), 'الزيارات'), A.stat(A.ar(v.sessions), 'الجلسات')]),
+                        h('div', { cls: 'mut', text: 'المعرّف الثابت: ' + v.vid }), h('div', { cls: 'mut', text: [DEVN[v.device] || '', v.os, v.browser, 'شاشة ' + (v.scr || '—')].join(' · ') }),
+                        h('div', { cls: 'mut', text: 'الموقع التقريبي: ' + cname(v.country) + (v.city ? ' - ' + v.city : '') + ' · IP (مُقنَّع): ' + (v.ip_mask || 'غير متوفر') }), h('div', { cls: 'mut', text: 'أول ظهور: ' + dt(v.first_seen) + ' · آخر ظهور: ' + dt(v.last_seen) }),
+                        h('h4', { text: 'مراسلة هذا الجهاز' }), h('div', { cls: 'mut', text: 'تصل الرسالة فقط إن كان الزائر فعّل «السماح للإدارة بمراسلة هذا الجهاز» من مركز الدعم.' }), ti, bo,
+                        h('button', { cls: 'btn sm', type: 'button', text: 'إرسال', onclick: function () { if (!ti.value.trim() || !bo.value.trim()) { A.toast('اكتب العنوان والنص'); return; } A.rpc('admin_broadcast', { p_country: '', p_device: '', p_vids: [v.vid], p_title: ti.value.trim(), p_body: bo.value.trim() }).then(function () { A.toast('أُرسلت'); open(v); }).catch(function (e) { A.toast(e.message); }); } })]));
+                    detail.appendChild(A.card('البلاغات المرتبطة', rp.length ? [tbl(h, ['الرقم', 'النوع', 'الحالة', 'الوقت'], rp.map(function (z) { return [z.code, RC[z.category] || z.category, RS[z.status] || z.status, dt(z.at)]; }))] : [h('div', { cls: 'mut', text: 'لا بلاغات.' })]));
+                    detail.appendChild(A.card('الرسائل مع هذا الجهاز', ms.length ? ms.map(function (m) { return h('div', { cls: 'bub ' + (m.dir === 'in' ? 'usr' : 'adm'), text: (m.dir === 'in' ? 'الجهاز: ' : 'الإدارة: ') + m.body + ' — ' + dt(m.created_at) + (m.dir === 'out' ? (m.read_at ? ' (قُرئت)' : m.delivered_at ? ' (وصلت)' : ' (بانتظار الوصول)') : '') }); }) : [h('div', { cls: 'mut', text: 'لا رسائل.' })]));
+                    detail.appendChild(A.card('سجل الاستخدام والأخطاء — آخر 7 أيام', ev.length ? [tbl(h, ['الوقت', 'النوع', 'القسم', 'التفاصيل'], ev.map(function (e) { return [dt(e.at), { visit: 'زيارة', nav: 'تنقّل', error: 'خطأ', report: 'بلاغ' }[e.kind] || e.kind, sn(e.section), e.detail]; }))] : [h('div', { cls: 'mut', text: 'لا أحداث خلال 7 أيام (تُحذف التفاصيل تلقائيًا بعدها، وتبقى بيانات الجهاز الأساسية).' })]));
+                    detail.scrollIntoView({ behavior: 'smooth' });
+                });
+            }
+            var qi = h('input', { placeholder: 'بحث: #رقم / معرّف / مدينة / IP', value: F.q }); qi.addEventListener('change', function () { F.q = qi.value; A.reload(); });
+            return h('div', null, [h('h3', { text: 'مركز الأجهزة الذكي' }), h('div', { cls: 'filters' }, [qi, sel(h, [['', 'كل الأجهزة']].concat(Object.keys(DEVN).map(function (k) { return [k, DEVN[k]]; })), F.dev, function (v) { F.dev = v; A.reload(); })]),
+                A.card('مشكلات متكررة (آخر 7 أيام)', [A.list(repeated)]),
+                A.card('الأجهزة', [tbl(h, ['#', 'المعرّف', 'الحالة', 'آخر ظهور', 'زيارات', 'الدولة/المدينة', 'IP مُقنَّع', 'الجهاز', 'أخطاء 7 أيام', ''], rows.map(function (v) { var on = Date.now() - new Date(v.last_seen) < 180000; return ['#' + v.serial, v.vid.slice(0, 8), tag(h, on ? 'متصل' : 'غير متصل', on ? 'ok' : ''), A.ago(v.last_seen), A.ar(v.visits), cname(v.country) + (v.city ? ' / ' + v.city : ''), v.ip_mask || '—', (DEVN[v.device] || '') + ' · ' + v.os + ' · ' + v.browser, errCnt[v.vid] ? tag(h, String(errCnt[v.vid]), 'warn') : '0', h('button', { cls: 'btn alt sm', type: 'button', text: 'فتح الملف', onclick: function () { open(v); } })]; }))]),
+                detail, h('div', { cls: 'mut pre', text: 'خصوصية: المعرّف عشوائي يُنشأ في متصفح الزائر؛ لا بصمة جهاز. عنوان IP لا يُحفظ كاملًا بل مُقنَّع (آخر خانة مصفّرة) ويُستخدم للتقدير فقط. تُحذف أحداث الاستخدام والأخطاء بعد 7 أيام. يضيع المعرّف بمسح بيانات المتصفح أو تغيير الجهاز.' })]);
+        });
+    }
+
+    /* ============ المراسلات ============ */
+    function comms(A) {
+        var h = A.h;
+        return Promise.all([A.rest('visitor_messages?select=*&dir=eq.in&archived=eq.false&order=created_at.desc&limit=60'), A.rest('visitor_messages?select=*&dir=eq.out&order=created_at.desc&limit=40'), A.rest('visitors?select=vid,serial&order=serial.desc&limit=400')]).then(function (r) {
+            var IN = r[0] || [], OUT = r[1] || [], S = {}; (r[2] || []).forEach(function (v) { S[v.vid] = v.serial; });
+            var tt = h('input', { maxlength: 100, placeholder: 'عنوان الرسالة' }), bb = h('textarea', { maxlength: 800, placeholder: 'نص الرسالة' }), cc = h('input', { maxlength: 2, placeholder: 'رمز الدولة (اختياري) مثل LY', dir: 'ltr' }), dv = sel(h, [['', 'كل الأجهزة']].concat(Object.keys(DEVN).map(function (k) { return [k, DEVN[k]]; })), '');
+            return h('div', null, [h('h3', { text: 'المراسلات' }),
+                A.card('رسالة لمجموعة أجهزة', [h('div', { cls: 'mut', text: 'تصل فقط للأجهزة التي سمح أصحابها باستقبال رسائل الإدارة. الحد الأقصى 1000 جهاز للرسالة.' }), h('label', null, ['العنوان', tt]), h('label', null, ['النص', bb]), h('label', null, ['الدولة', cc]), h('label', null, ['نوع الجهاز', dv]), h('button', { cls: 'btn', type: 'button', text: 'إرسال', onclick: function () { if (!tt.value.trim() || !bb.value.trim()) { A.toast('اكتب العنوان والنص'); return; } A.confirmBox('إرسال الرسالة للمجموعة المحددة؟').then(function (ok) { if (ok) A.rpc('admin_broadcast', { p_country: cc.value.trim().toUpperCase(), p_device: dv.value, p_vids: null, p_title: tt.value.trim(), p_body: bb.value.trim() }).then(function (n) { A.toast('أُرسلت إلى ' + n + ' جهاز'); A.reload(); }).catch(function (e) { A.toast(e.message); }); }); } })]),
+                A.card('الوارد من الأجهزة', IN.length ? IN.map(function (m) { var ri = h('input', { placeholder: 'اكتب ردًا', maxlength: 800 }); return h('div', { cls: 'card' }, [h('div', { cls: 'bub usr', text: 'الجهاز #' + (S[m.vkey] || '؟') + ': ' + m.body + ' — ' + dt(m.created_at) }), ri, h('div', { cls: 'row' }, [h('button', { cls: 'btn sm', type: 'button', text: 'ردّ', onclick: function () { if (!ri.value.trim()) return; A.rpc('admin_broadcast', { p_country: '', p_device: '', p_vids: [m.vkey], p_title: 'رد الإدارة', p_body: ri.value.trim() }).then(function () { A.rest('visitor_messages?id=eq.' + m.id, { method: 'PATCH', body: { archived: true }, prefer: 'return=minimal' }); A.toast('أُرسل الرد'); A.reload(); }).catch(function (e) { A.toast(e.message); }); } }), h('button', { cls: 'btn alt sm', type: 'button', text: 'أرشفة', onclick: function () { A.rest('visitor_messages?id=eq.' + m.id, { method: 'PATCH', body: { archived: true }, prefer: 'return=minimal' }).then(function () { A.reload(); }); } })])]); }) : [h('div', { cls: 'mut', text: 'لا رسائل واردة.' })]),
+                A.card('الصادر', OUT.length ? [tbl(h, ['الوقت', 'الجهاز', 'العنوان', 'الحالة'], OUT.map(function (m) { return [dt(m.created_at), '#' + (S[m.vkey] || '؟'), m.title, m.read_at ? 'قُرئت' : m.delivered_at ? 'وصلت' : 'بانتظار']; }))] : [h('div', { cls: 'mut', text: 'لا رسائل صادرة.' })])]);
+        });
+    }
+
+    /* ============ دليل الاستخدام ============ */
+    var GUIDE = [['مركز الزوار', 'إحصاءات حية: المتصلون الآن، جدد/عائدون، خريطة الدول. «آخر ظهور» تقريبي عند الانقطاع المفاجئ.'], ['مركز الأجهزة', 'لكل جهاز رقم تسلسلي ومعرّف عشوائي ثابت في متصفحه. افتح ملف الجهاز لرؤية آخر 7 أيام من الاستخدام والأخطاء ومراسلته. يضيع المعرّف بمسح بيانات المتصفح.'], ['رحلة الزائر', 'مسارات تجميعية (قسم ← قسم) بلا تتبع أشخاص.'], ['المراسلات', 'رسائل جماعية أو لجهاز محدد، ومحادثات مع الزوار الذين فعّلوا الاستقبال.'], ['البلاغات', 'لكل بلاغ رقم متابعة (MS-…). ردّك يظهر لصاحبه في «مركز الدعم الفني ← متابعة بلاغ» بلا حساب. زر «نسخ تقرير التشخيص» يجهّز نصًا منظمًا تلصقه يدويًا في ChatGPT.'], ['الاقتراحات', 'تُدمج المتشابهة تلقائيًا ويُرتَّب بالأصوات المجهولة.'], ['المهام التلقائية', 'جدولة آمنة فقط (نشر/إيقاف إعلان، صيانة، ترحيب) تُنفَّذ كل ~5 دقائق.'], ['مصادر المحتوى', 'فحص كل 15 دقيقة لخدمات القرآن والصوت والأحاديث والقبلة. لا يُستبدل أي مصدر تلقائيًا.'], ['الصيانة المتقدمة', 'للموقع كله أو لقسم واحد، يدوية أو بجدول، مع معاينة.'], ['التنبيهات', 'أعطال المصادر، ارتفاع الأخطاء، قرب حدود الخطة، بلاغات واقتراحات جديدة، مهام فاشلة.'], ['وضع المطوّر', 'حالة القواعد والخدمات والأخطاء دون أي أسرار.'], ['الخطة المجانية', 'حذف تلقائي لتفاصيل الاستخدام والأخطاء بعد 7 أيام، مع بقاء الملخصات اليومية وبيانات الأجهزة الأساسية. راقب «استهلاك الخطة المجانية».'], ['الأمان', 'لا تشارك كلمة المرور. بدّلها من «إعدادات الحساب». أنهِ الجلسات الغريبة من نفس الصفحة.']];
+    function guide(A) { var h = A.h; return Promise.resolve(h('div', null, [h('h3', { text: 'دليل الاستخدام' })].concat(GUIDE.map(function (g) { return A.card(g[0], [h('div', { cls: 'pre', text: g[1] })]); })))); }
+
+    /* ============ تقرير حالة الميزات ============ */
+    function status(A) {
+        var h = A.h, T = ['visitors', 'device_events', 'flow_daily', 'scheduled_tasks', 'task_runs', 'admin_alerts', 'reports', 'report_messages', 'suggestions', 'content_sources', 'source_checks', 'visitor_messages', 'features', 'announcements'];
+        return Promise.all([Promise.all(T.map(function (n) { return A.rest(n + '?select=*&limit=1').then(function () { return [n, true]; }).catch(function () { return [n, false]; }); })), A.rpc('admin_dev_snapshot'), A.rest('content_sources?select=key,label,status,local,critical'), A.rest('source_checks?select=at&order=at.desc&limit=1')]).then(function (r) {
+            var okT = r[0].filter(function (x) { return x[1]; }).length, D = r[1], S = r[2] || [], last = (r[3] || [])[0], rows = [];
+            function add(n, ok, note) { rows.push([n, tag(h, ok === true ? 'يعمل' : ok === false ? 'لا يعمل' : 'غير منفَّذ', ok === true ? 'ok' : ok === false ? 'bad' : 'warn'), note || '']); }
+            add('جداول النظام (' + T.length + ')', okT === T.length, okT + ' متاحة للمدير عبر RLS');
+            add('المهام الدورية pg_cron', (D.cron || []).filter(function (c) { return c.active; }).length >= 4, (D.cron || []).map(function (c) { return c.name; }).join('، '));
+            add('فحص مصادر المحتوى', !!last && Date.now() - new Date(last.at) < 40 * 60000, last ? 'آخر فحص ' + A.ago(last.at) : 'لم يُنفَّذ');
+            S.filter(function (s) { return !s.local; }).forEach(function (s) { add('مصدر: ' + s.label, s.status === 'ok' ? true : s.status === 'unknown' ? null : false, s.status); });
+            add('الحذف التلقائي بعد 7 أيام', (D.cron || []).some(function (c) { return c.name === 'almuslim-prune'; }), 'مهمة يومية 03:17 UTC');
+            add('إشعارات Push', null, 'غير مفعّلة: تحتاج مفاتيح VAPID وإعدادًا إضافيًا (انظر التقرير)');
+            add('القارئ عمير شميم', null, 'غير مضاف: لا تسجيلات مؤكدة كاملة/حقوق غير واضحة');
+            return h('div', null, [h('h3', { text: 'تقرير حالة الميزات' }), A.card(null, [tbl(h, ['الميزة', 'الحالة', 'ملاحظة'], rows)]), h('div', { cls: 'mut', text: 'يُفحص حيًّا عند فتح الصفحة.' })]);
+        });
+    }
+
+    var TIPS = {
+        dash: 'ملخص عام للموقع: الزيارات والأقسام الأكثر استخدامًا. الأرقام تجميعية ولا تكشف هوية أحد.',
+        feat: 'شغّل/أوقف أو أخفِ أقسام الموقع. الإيقاف لا يحذف أي بيانات للزوار.',
+        ann: 'إعلانات تظهر للزوار كشريط أو نافذة. حدّد وقت البدء والانتهاء.',
+        msg: 'رسائل لزوار فعّلوا الاستقبال (قديم). للمراسلة الأشمل استخدم «المراسلات».',
+        gen: 'اسم الموقع، وضع الموارد المنخفضة، ورسالة الترحيب والصيانة السريعة.',
+        usage: 'استهلاك الخطة المجانية في Supabase. عند القرب من الحدود ارفع «وضع الموارد المنخفضة».',
+        health: 'الأخطاء المجمّعة من متصفحات الزوار حسب القسم.',
+        log: 'كل عملية إدارية تُسجَّل بتاريخها ونتيجتها.',
+        acc: 'غيّر كلمة المرور (الحالية + الجديدة + التأكيد) وأدر جلسات الأجهزة. تبقى جلستك الحالية بعد التغيير وتُنهى الأخرى.',
+        ver: 'النسخ والإصدارات ونظام التحديث.'
+    };
+    function theme() { var m; try { m = localStorage.getItem('adm-t') || ''; } catch (e) { m = ''; } if (m) document.documentElement.setAttribute('data-t', m); }
+    theme();
+    var iv = 0;
     window.__admX = {
-        tabs: [['vis', 'مركز الزوار', visitors], ['jour', 'رحلة الزائر', journey], ['tasks', 'المهام التلقائية', tasks], ['src', 'مصادر المحتوى', sources], ['alerts', 'التنبيهات', alerts], ['maint', 'الصيانة المتقدمة', maint], ['rep', 'البلاغات', reports], ['sug', 'الاقتراحات', suggestions], ['dev', 'وضع المطوّر', dev]],
+        tips: TIPS,
+        tabs: [['vis', 'مركز الزوار', visitors], ['dev', 'مركز الأجهزة', devices], ['jour', 'رحلة الزائر', journey], ['comms', 'المراسلات', comms], ['rep', 'البلاغات', reports], ['sug', 'الاقتراحات', suggestions], ['tasks', 'المهام التلقائية', tasks], ['src', 'مصادر المحتوى', sources], ['alerts', 'التنبيهات', alerts], ['maint', 'الصيانة المتقدمة', maint], ['devmode', 'وضع المطوّر', dev], ['status', 'تقرير حالة الميزات', status], ['guide', 'دليل الاستخدام', guide]],
         after: function (A, nav) {
+            var cur = ''; try { cur = localStorage.getItem('adm-t') || ''; } catch (e) { }
             A.rest('admin_alerts?select=id&read=eq.false&archived=eq.false&limit=100').then(function (r) { if (!r || !r.length) return; var b = [].slice.call(nav.querySelectorAll('button')).filter(function (x) { return x.textContent.indexOf('التنبيهات') === 0; })[0]; if (b) b.appendChild(A.h('span', { cls: 'badge', text: String(r.length) })); }).catch(function () { });
+            clearInterval(iv); iv = setInterval(function () { var a = document.activeElement, typing = a && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName); var live = /(مركز الزوار|مركز الأجهزة|التنبيهات)/.test((nav.querySelector('.on, .act, [aria-current]') || {}).textContent || ''); if (!document.hidden && !typing && live) A.reload(); }, 60000);
         }
     };
 })();
